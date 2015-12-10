@@ -67,15 +67,16 @@ def test_login(init):
     assert b'<title>Home' in data
     assert b'login' not in data
     assert b'logout' in data
-    
-    with app.test_request_context('/'):
-        app.preprocess_request()
-        print(flask.g.user.nickname)
-    
+
     # Assert page redirection when asking if already logged
-    r = app.test_client().get(url_for('login'))
-    data = r.get_data()
-    assert r.status_code == 200
-    assert b'<title>Home' in data
-    assert b'login' not in data
-    assert b'logout' in data
+    
+   # with app.test_request_context('/'):
+   #     app.preprocess_request()
+   #     print(flask.g.user.nickname)
+    
+    # r = app.test_client().get(url_for('login'))
+    # data = r.get_data()
+    # assert r.status_code == 200
+    # assert b'<title>Home' in data
+    # assert b'login' not in data
+    # assert b'logout' in data
