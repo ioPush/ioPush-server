@@ -3,3 +3,5 @@ virtualenv
 *.db
 .cache
 .coverage
+db_repository/
+

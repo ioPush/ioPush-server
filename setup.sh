@@ -9,3 +9,5 @@ virtualenv/bin/pip install flask-WTF
 virtualenv/bin/pip install flask-login
 virtualenv/bin/pip install flask-sqlalchemy
 virtualenv/bin/pip install sqlalchemy-migrate
+mkdir misc
+
