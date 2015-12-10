@@ -4,4 +4,4 @@ virtualenv
 .cache
 .coverage
 db_repository/
-
+*.pyc
