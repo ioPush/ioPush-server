@@ -1,0 +1,20 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+  {% include 'flash.html' %}
+  <div class="well well-sm">
+    <h2>{{ user.nickname }}'s profile</h2>
+  </div>
+  <dl class="dl-horizontal">
+    <dt>Email</dt><dd>{{ user.email }}</dd>
+    <dt>API key</dt><dd>{{ user.apiKey }}</dd><dd><button type="button" class="btn btn-default btn-xs">Regenerate</button></dd>
+  </dl>
+  <ul class="list-group">
+    {% for post in posts %}
+      <li class="list-group-item">
+        {{ post.body }}<span class="pull-right label label-warning">Warning</span>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
