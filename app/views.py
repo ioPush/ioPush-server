@@ -57,10 +57,6 @@ def user(nickname):
     if user == None:
         flash('User %s not found.' % nickname)
         return redirect(url_for('index')) 
-    posts = [
-        {'body': 'High level of pollution'},
-        {'body': 'No more battery in sensor 1'} 
-    ]
     posts = g.user.posts.all()
     return render_template('user.html',
                            user=user,
