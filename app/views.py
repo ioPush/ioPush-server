@@ -1,10 +1,20 @@
 from datetime import datetime
 from os import urandom
 from flask import render_template, flash, redirect, session, url_for, request, g
-from flask.ext.login import login_user, logout_user, current_user, login_required
-from app import app, db, lm
+#from flask.ext.login import login_user, logout_user, current_user, login_required
+from flask.ext.security import Security, SQLAlchemyUserDatastore, login_required, current_user
+from app import app, db
 from .forms import LoginForm
 from .models import User, Post
+
+
+
+
+# Flask-Security
+user_datastore = SQLAlchemyUserDatastore(db, User, None)
+security = Security(app, user_datastore)
+
+
 
 @app.route('/')
 @app.route('/index')
@@ -13,7 +23,7 @@ def index():
                            title='Home',
                            user=user)
                            
-                           
+"""                           
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     print('G.user :', g.user)
@@ -26,12 +36,13 @@ def login():
     return render_template('login.html', 
                            title='Sign In',
                            form=form)
-
+"""
+"""
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
-    
+""" 
     
 @app.route('/api/post', methods=['POST'])
 def post():
@@ -62,12 +73,12 @@ def user(nickname):
                            user=user,
                            posts=posts)
 
-
+"""
 @lm.user_loader
 def loadUser(id):
     return User.query.get(int(id))
-
-
+"""
+"""
 def login(formData):
     if (formData != "test123") and (formData != "123"):
         flash('Invalid login. Please try again.')
@@ -84,8 +95,23 @@ def login(formData):
         session.pop('remember_me', None)
     login_user(user, remember = remember_me)
     return redirect(request.args.get('next') or url_for('index'))
-
+"""
 
 @app.before_request
 def before_request():
     g.user = current_user
+
+"""
+@app.before_first_request
+def create_user():
+    user_datastore.create_user(nickname='utest', email='utest@test.com', password='ptest')
+    db.session.commit()
+"""
+
+
+
+
+
+
+
+

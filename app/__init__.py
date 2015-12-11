@@ -1,16 +1,25 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import LoginManager
+#from flask.ext.login import LoginManager
 from config import basedir
 import os
 
+# Application
 app = Flask(__name__)
 app.config.from_object('config')
 
+# Database
 db = SQLAlchemy(app)
 
-lm = LoginManager()
-lm.init_app(app)
-lm.login_view = 'login'
+
+
+
+#lm = LoginManager()
+#lm.init_app(app)
+#lm.login_view = 'login'
+
+
+
 
 from app import views, models
+
