@@ -23,10 +23,9 @@ def index():
                            title='Home',
                            user=user)
                            
-"""                           
+"""                       
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    print('G.user :', g.user)
     if g.user is not None and g.user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -36,9 +35,11 @@ def login():
     return render_template('login.html', 
                            title='Sign In',
                            form=form)
-"""
-"""
+
+
+
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
@@ -101,12 +102,13 @@ def login(formData):
 def before_request():
     g.user = current_user
 
-"""
+
 @app.before_first_request
 def create_user():
-    user_datastore.create_user(nickname='utest', email='utest@test.com', password='ptest')
-    db.session.commit()
-"""
+    #user_datastore.create_user(nickname='utest', email='utest@test.com', password='ptest')
+    #db.session.commit()
+    pass
+    
 
 
 

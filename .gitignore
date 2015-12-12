@@ -5,3 +5,4 @@ virtualenv
 .coverage
 db_repository/
 *.pyc
+.DS_Store
