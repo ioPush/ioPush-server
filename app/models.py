@@ -1,3 +1,5 @@
+#-*- coding: utf-8 -*-
+
 from app import db
 from flask.ext.security import Security, UserMixin
 from sqlalchemy.ext.hybrid import hybrid_property
