@@ -50,7 +50,6 @@ def post():
     return 'ok'
     
 
-
 @app.route('/user/<nickname>')
 @login_required
 def user(nickname):

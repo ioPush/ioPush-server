@@ -1,32 +1,21 @@
-
-
 {% extends "base.html" %}
 
 {% from "security/_macros.html" import render_field_with_errors, render_field, render_checkbox %}
-{% include "security/_messages.html" %}
+
 
 {% block content %}
-<div class="well">
-  <h3><u>{{ 'Please Sign In' }}</u></h3>
-  <form class="form-horizontal" action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
-    {{ login_user_form.hidden_tag() }}
-    <div class="form-group">
+  {% include "security/_messages.html" %}
+  
+  <div class="well">
+    <h3><u>{{ 'Please Sign In' }}</u></h3>
+    <form class="form-horizontal" action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
+      {{ login_user_form.hidden_tag() }}
       {{ render_field_with_errors(login_user_form.email) }}
-    </div>
-    <div class="form-group">
       {{ render_field_with_errors(login_user_form.password) }}
-    </div>
-    <div class="form-group">
       {{ render_checkbox(login_user_form.remember) }}
-    </div>
-    <div class="form-group">
       {{ render_field(login_user_form.next) }}
-    </div>
-    <div class="form-group">
       {{ render_field(login_user_form.submit) }} 
-    </div>
-  </form>
-
+    </form>
+  </div>
+  
 {% endblock %}
-
-{% include "security/_menu.html" %}
