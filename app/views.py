@@ -5,15 +5,15 @@ from os import urandom
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.security import Security, SQLAlchemyUserDatastore, login_required, current_user, auth_token_required
 from app import app, db
-from .forms import LoginForm
 from .models import User, Post
+from .forms import ExtendedRegisterForm
 
 
 
 
 # Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, None)
-security = Security(app, user_datastore)
+security = Security(app, user_datastore, register_form=ExtendedRegisterForm)
 
 
 

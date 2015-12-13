@@ -37,6 +37,7 @@
                 {% if current_user.is_authenticated %}
                   <li><a class="btn btn-default" href="{{ url_for('security.logout') }}" role="button">{{ 'Logout' }}</a></li>
                 {% else %}
+                  <li><a class="btn btn-default" href="{{ url_for('security.register') }}" role="button">{{ 'Register' }}</a></li>
                   <li><a class="btn btn-default" href="{{ url_for('security.login') }}" role="button">{{ 'Login' }}</a></li>
                 {% endif %}
               </ul> <!-- navbar-right -->

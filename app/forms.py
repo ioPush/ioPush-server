@@ -3,7 +3,9 @@
 from flask.ext.wtf import Form
 from wtforms import StringField, BooleanField
 from wtforms.validators import DataRequired
+from flask_security.forms import RegisterForm
 
-class LoginForm(Form):
-    id = StringField('id', validators=[DataRequired()])
-    remember_me = BooleanField('remember_me', default=False)
+
+class ExtendedRegisterForm(RegisterForm):
+    #TODO - Check if nickname is unique
+    nickname = StringField('Nickname', [DataRequired()])

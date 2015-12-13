@@ -3,13 +3,13 @@
 {% from "security/_macros.html" import render_field_with_errors, render_field %}
 
 {% block content %}
-  <!-- TODO - Add nickname field -->
   {% include "security/_messages.html" %}
   <div class="well">
     <h3><u>{{ 'Welcome, just few details to fill !' }}</u></h3>
     <form class="form-horizontal" action="{{ url_for_security('register') }}" method="POST" name="register_user_form">
       
       {{ register_user_form.hidden_tag() }}
+      {{ render_field_with_errors(register_user_form.nickname) }}
       {{ render_field_with_errors(register_user_form.email) }}
       {{ render_field_with_errors(register_user_form.password) }}
       {% if register_user_form.password_confirm %}
