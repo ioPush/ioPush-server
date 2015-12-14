@@ -4,6 +4,7 @@ from datetime import datetime
 from os import urandom
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.security import Security, SQLAlchemyUserDatastore, login_required, current_user, auth_token_required
+from sqlalchemy import desc
 from app import app, db
 from .models import User, Post
 from .forms import ExtendedRegisterForm
@@ -42,9 +43,8 @@ def post():
     print(data)
     body = data.get('body', None)
     if body is None:
-        return 'No "body" tag found'  
-    user = User.query.filter_by(nickname='123').first()
-    post = Post(body=body, timestamp=datetime.utcnow(), userId=user.id)
+        return 'No "body" tag found' 
+    post = Post(body=body, timestamp=datetime.utcnow(), userId=current_user.id)
     db.session.add(post)
     db.session.commit()
     return 'ok'
@@ -64,7 +64,7 @@ def user(nickname):
     if user == None:
         flash('User %s not found.' % nickname)
         return redirect(url_for('index')) 
-    posts = current_user.posts.all()
+    posts = current_user.posts.order_by(desc(Post.timestamp)).all()
     return render_template('user.html',
                            user=user,
                            posts=posts)
