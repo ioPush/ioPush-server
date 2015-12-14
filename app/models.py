@@ -26,7 +26,7 @@ class User(db.Model, UserMixin):
     def roles(self):
         return []
     @roles.setter
-    def roles(self, role):
+    def roles(self, role): # pragma: no cover # Just a trick, roles not used
         pass
             
     def __repr__(self):

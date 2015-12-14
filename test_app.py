@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 
 import pytest
+from datetime import datetime
 from config import basedir
 from app import app, db
 from app.models import User, Post
@@ -103,12 +104,11 @@ def test_loginOut(init):
     # assert b'logout' in data
     
     # Assert logout
-    """
     r = app.test_client().get(url_for('security.logout'))
     data = r.get_data()
     assert r.status_code == 302
-    assert b'You should be redirected automatically to target URL: <a href="/index">/index</a>.' in data
-    """
+    assert b'You should be redirected automatically to target URL: <a href="/">/</a>.' in data
+   
     
 
 def test_post(init):
@@ -128,7 +128,6 @@ def test_post(init):
                                     headers={'authentication_token': user.get_auth_token()},
                                     follow_redirects=True)
     data = r.get_data()
-    print(data)
     assert r.status_code == 200
     assert data == b'No "body" tag found'
     # Assert post
@@ -142,5 +141,18 @@ def test_post(init):
     assert posts[0].body == 'message abc'
     assert posts[0].timestamp is not None
     assert posts[0].logCode is None
+    with pytest.raises(IndexError):
+        assert posts[1] is None
+    
+    
+    
+def test_misc():
+    # User repr
+    user = User(nickname='utest', email='utest@test.com', password='pptest', active=True)
+    assert str(user) == "<User 'utest'>"
+    # Post repr
+    post = Post(body='message abc', timestamp=datetime.utcnow(), userId=1)
+    assert str(post) == "<Post 'message abc'>"
+    
     
 

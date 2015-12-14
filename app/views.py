@@ -40,7 +40,6 @@ def post():
         :return: 'ok' if success, an error otherwise
     """
     data = request.get_json(force=True, silent=False)
-    print(data)
     body = data.get('body', None)
     if body is None:
         return 'No "body" tag found' 
