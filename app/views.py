@@ -67,12 +67,21 @@ def user(nickname):
     posts = current_user.posts.order_by(desc(Post.timestamp)).all()
     return render_template('user.html',
                            user=user,
-                           posts=posts)
+                           posts=posts,
+                           title='Profile')
 
 
 @security.login_context_processor
 def login_register_processor():
     return dict(title="Log in")
+    
+@security.register_context_processor
+def register_register_processor():
+    return dict(title="Register")
+    
+@security.change_password_context_processor
+def change_password_register_processor():
+    return dict(title="Change password")
 
 
 @app.before_first_request
