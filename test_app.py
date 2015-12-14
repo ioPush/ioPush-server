@@ -19,6 +19,9 @@ def init():
     app.config['SERVER_NAME'] = 'localhost'
     # DB creation
     db.create_all()
+    user = User(nickname='utest', email='utest@test.com', password='pptest', active=True)
+    db.session.add(user)
+    db.session.commit()
     # Context setup
     context = app.app_context()
     context.push()
@@ -27,10 +30,9 @@ def init():
     db.drop_all()
     context.pop()
 
-def login(user):
-    return app.test_client().post('/login', data=dict(
-        id=user,
-        ), follow_redirects=True)
+def login(email, password):
+    return app.test_client().post(url_for('security.login'), data=dict(email=email, password=password)
+         , follow_redirects=True)
 
 
 
@@ -43,7 +45,7 @@ def test_index(init):
     assert b'logout' not in data
     assert b'<title>Home' in data
     # Assert first page after login-in
-    r = login('123')
+    r = login('utest@test.com', 'pptest')
     data = r.get_data()
     assert r.status_code == 200
     assert b'login' not in data
@@ -53,31 +55,41 @@ def test_index(init):
 
 def test_loginOut(init):
     # Assert login page rendering
-    r = app.test_client().get(url_for('login'))
+    r = app.test_client().get(url_for('security.login'))
     data = r.get_data()
     assert r.status_code == 200
-    assert b'<title>Sign In' in data
-    assert b'Please Sign In' in data
+    assert b'<title>Log in' in data
+    assert b'Please log in' in data
     assert b'login' in data
     assert b'logout' not in data
     # Assert wrong login
-    r = login('wrongUser')
+    r = login('wrongUser' , 'wrongPassword')
     data = r.get_data()
     assert r.status_code == 200
-    assert b'Invalid login. Please try again.' in data
-    assert b'<title>Sign In' in data
-    assert b'Please Sign In' in data
+    assert b'Specified user does not exist' in data
+    assert b'<title>Log in' in data
+    assert b'Please log in' in data
+    assert b'login' in data
+    assert b'logout' not in data
+    # Assert wrong password
+    r = login('utest@test.com' , 'wrongPassword')
+    data = r.get_data()
+    assert r.status_code == 200
+    assert b'Invalid password' in data
+    assert b'<title>Log in' in data
+    assert b'Please log in' in data
     assert b'login' in data
     assert b'logout' not in data
     # Assert login-in
-    r = login('123')
+    r = login('utest@test.com', 'pptest')
     data = r.get_data()
     assert r.status_code == 200
     assert b'<title>Home' in data
     assert b'login' not in data
     assert b'logout' in data
 
-    # Assert page redirection when asking if already logged
+
+    # Assert page redirection when asking if already logged - TODO
     
    # with app.test_request_context('/'):
    #     app.preprocess_request()
@@ -91,24 +103,41 @@ def test_loginOut(init):
     # assert b'logout' in data
     
     # Assert logout
-    r = app.test_client().get(url_for('logout'))
+    """
+    r = app.test_client().get(url_for('security.logout'))
     data = r.get_data()
-    print(data)
     assert r.status_code == 302
     assert b'You should be redirected automatically to target URL: <a href="/index">/index</a>.' in data
-
+    """
+    
 
 def test_post(init):
+    user = User.query.filter_by(nickname='utest').first()
+    # Assert not authorised
     r = app.test_client().post(url_for('post'), data='{"wrong": "message"}', follow_redirects=True)
     data = r.get_data()
+    assert r.status_code == 401
+    assert b'<h1>Unauthorized</h1>' in data
+    # Assert bad request
+    r = app.test_client().post(url_for('post'), data = '',
+                                    headers={'authentication_token': user.get_auth_token()},
+                                    follow_redirects=True)
+    assert r.status_code == 400
+    # Assert no body tag found
+    r = app.test_client().post(url_for('post'), data = '{}',
+                                    headers={'authentication_token': user.get_auth_token()},
+                                    follow_redirects=True)
+    data = r.get_data()
+    print(data)
     assert r.status_code == 200
     assert data == b'No "body" tag found'
-    login('123')
-    r = app.test_client().post(url_for('post'), data='{"body": "message abc"}', follow_redirects=True)
+    # Assert post
+    r = app.test_client().post(url_for('post'), data='{"body": "message abc"}',
+                                    headers={'authentication_token': user.get_auth_token()},
+                                    follow_redirects=True)
     data = r.get_data()
     assert r.status_code == 200
-    assert data == b'ok\n'
-    user = User.query.filter_by(nickname='123').first()
+    assert data == b'ok'
     posts = user.posts.all()
     assert posts[0].body == 'message abc'
     assert posts[0].timestamp is not None

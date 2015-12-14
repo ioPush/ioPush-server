@@ -70,7 +70,9 @@ def user(nickname):
                            posts=posts)
 
 
-
+@security.login_context_processor
+def login_register_processor():
+    return dict(title="Log in")
 
 
 @app.before_first_request

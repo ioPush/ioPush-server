@@ -6,7 +6,7 @@
 {% block content %}
   
   <div class="well">
-    <h3><u>{{ 'Please Sign In' }}</u></h3>
+    <h3><u>{{ 'Please log in' }}</u></h3>
     <form class="form-horizontal" action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
       {{ login_user_form.hidden_tag() }}
       {{ render_field_with_errors(login_user_form.email) }}
