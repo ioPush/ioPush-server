@@ -13,7 +13,11 @@
   <ul class="list-group">
     {% for post in posts %}
       <li class="list-group-item">
-        {{ post.body }}<span class="pull-right label label-warning">Warning</span>
+        {{ post.body }}
+        {% if post.badge is equalto('W') %}<span class="pull-right label label-warning">Warning</span>{% endif %}
+        {% if post.badge is equalto('E') %}<span class="pull-right label label-danger">Error</span>{% endif %}
+        {% if post.badge is equalto('S') %}<span class="pull-right label label-success">OK</span>{% endif %}
+        {% if post.badge is equalto('I') %}<span class="pull-right label label-info">Info</span>{% endif %}
       </li>
     {% endfor %}
   </ul>

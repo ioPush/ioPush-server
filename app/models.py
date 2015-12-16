@@ -37,7 +37,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     body = db.Column(db.String(500))
     timestamp = db.Column(db.DateTime)
-    logCode = db.Column(db.String(1))
+    badge = db.Column(db.String(1))
     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     
     def __repr__(self):

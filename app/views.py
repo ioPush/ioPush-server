@@ -42,8 +42,9 @@ def post():
     data = request.get_json(force=True, silent=False)
     body = data.get('body', None)
     if body is None:
-        return 'No "body" tag found' 
-    post = Post(body=body, timestamp=datetime.utcnow(), userId=current_user.id)
+        return 'No "body" tag found'
+    badge = data.get('badge', None)
+    post = Post(body=body, timestamp=datetime.utcnow(), userId=current_user.id, badge=badge)
     db.session.add(post)
     db.session.commit()
     return 'ok'

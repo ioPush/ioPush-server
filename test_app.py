@@ -132,7 +132,7 @@ def test_post(init):
     assert r.status_code == 200
     assert data == b'No "body" tag found'
     # Assert post
-    r = app.test_client().post(url_for('post'), data='{"body": "message abc"}',
+    r = app.test_client().post(url_for('post'), data='{"body": "message abc", "badge": "W"}',
                                     headers={'authentication_token': user.get_auth_token()},
                                     follow_redirects=True)
     data = r.get_data()
@@ -141,10 +141,23 @@ def test_post(init):
     posts = user.posts.all()
     assert posts[0].body == 'message abc'
     assert posts[0].timestamp is not None
-    assert posts[0].logCode is None
-    # Asser only one post
+    assert posts[0].badge is 'W' # TODO - Test badge is None
+    # Assert post without badge
     with pytest.raises(IndexError):
         assert posts[1] is None
+    r = app.test_client().post(url_for('post'), data='{"body": "message abcd"}',
+                                    headers={'authentication_token': user.get_auth_token()},
+                                    follow_redirects=True)
+    data = r.get_data()
+    assert r.status_code == 200
+    assert data == b'ok'
+    posts = user.posts.all()
+    assert posts[1].body == 'message abcd'
+    assert posts[1].timestamp is not None
+    assert posts[1].badge is None
+    # Asserr only two posts
+    with pytest.raises(IndexError):
+        assert posts[2] is None
     
 
 def test_register(init):
