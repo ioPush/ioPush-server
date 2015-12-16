@@ -7,6 +7,7 @@ from app import app, db
 from app.models import User, Post
 import flask
 from flask import url_for
+from sqlalchemy import func
 
 
 @pytest.yield_fixture()
@@ -141,11 +142,45 @@ def test_post(init):
     assert posts[0].body == 'message abc'
     assert posts[0].timestamp is not None
     assert posts[0].logCode is None
+    # Asser only one post
     with pytest.raises(IndexError):
         assert posts[1] is None
     
-    
-    
+
+def test_register(init):
+    # Assert missing all
+    r = app.test_client().post('/register', data={
+        'password': '',
+        'nickname': '',
+        'password_confirm': '',
+        'email': ''
+    }, follow_redirects=True)
+    data = r.get_data()
+    assert b'This field is required.' in data
+    assert b'Email not provided' in data
+    assert b'Password not provided' in data
+    assert b'<title>Register' in data
+    # Assert nickname already registered and no registration
+    r = app.test_client().post('/register', data={
+        'password': 'azerty',
+        'nickname': 'utest',
+        'password_confirm': 'azerty',
+        'email': 'user2@user.com'
+    }, follow_redirects=True)
+    data = r.get_data()
+    assert b'Nickname already exists' in data
+    assert db.session.query(func.count(User.id)).scalar() == 1
+    # Assert registration succeded
+    r = app.test_client().post('/register', data={
+        'password': 'azerty',
+        'nickname': 'user',
+        'password_confirm': 'azerty',
+        'email': 'user2@user.com'
+    }, follow_redirects=True)
+    data = r.get_data()
+    assert b'<title>Home' in data
+    assert db.session.query(func.count(User.id)).scalar() == 2    
+        
 def test_misc():
     # User repr
     user = User(nickname='utest', email='utest@test.com', password='pptest', active=True)
