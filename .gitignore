@@ -6,3 +6,4 @@ virtualenv
 db_repository/
 *.pyc
 .DS_Store
+*.log
