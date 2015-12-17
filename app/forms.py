@@ -13,7 +13,7 @@ class ExtendedRegisterForm(RegisterForm):
     nickname = StringField('Nickname', [DataRequired()])
     
     def validate(self):
-        """ Add nicknae validation
+        """ Add nickname validation
         
             :return: True is the form is valid
         """

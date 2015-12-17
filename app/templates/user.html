@@ -13,11 +13,20 @@
   <ul class="list-group">
     {% for post in posts %}
       <li class="list-group-item">
-        {{ post.body }}
-        {% if post.badge is equalto('W') %}<span class="pull-right label label-warning">Warning</span>{% endif %}
-        {% if post.badge is equalto('E') %}<span class="pull-right label label-danger">Error</span>{% endif %}
-        {% if post.badge is equalto('S') %}<span class="pull-right label label-success">OK</span>{% endif %}
-        {% if post.badge is equalto('I') %}<span class="pull-right label label-info">Info</span>{% endif %}
+        <div class="container-fluid">
+          <div class="col-xs-2">
+            <script type="text/javascript">
+              document.write(moment("{{ post.timestamp.strftime("%Y-%m-%d %H:%M:%S") }}").fromNow());
+            </script>
+          </div>
+          <div class="col-xs-10">
+            {{ post.body }}
+            {% if post.badge is equalto('W') %}<span class="pull-right label label-warning">Warning</span>{% endif %}
+            {% if post.badge is equalto('E') %}<span class="pull-right label label-danger">Error</span>{% endif %}
+            {% if post.badge is equalto('S') %}<span class="pull-right label label-success">OK</span>{% endif %}
+            {% if post.badge is equalto('I') %}<span class="pull-right label label-info">Info</span>{% endif %}
+          </div>
+        </div>
       </li>
     {% endfor %}
   </ul>
