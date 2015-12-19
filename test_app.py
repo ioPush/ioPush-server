@@ -108,7 +108,7 @@ def test_loginOut(init):
     r = app.test_client().get(url_for('security.logout'))
     data = r.get_data()
     assert r.status_code == 302
-    assert b'You should be redirected automatically to target URL: <a href="/">/</a>.' in data
+    assert b'You should be redirected automatically to target URL: <a href="/index">/index</a>.' in data
    
     
 
