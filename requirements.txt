@@ -1,7 +1,7 @@
 wheel==0.26.0
 blinker==1.4
 coverage==4.0.3
-decorator==4.0.5
+decorator==4.0.*
 Flask==0.10.1
 Flask-Login==0.3.2
 Flask-Mail==0.9.1
