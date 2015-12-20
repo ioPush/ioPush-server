@@ -2,11 +2,29 @@
 Log keeper and Android-GCM push notification server (Python)
 
 ## Description
+Work in progress but registration works, and API to post messages too.
 
-## Instructions
-Work in progress
+The messages can be posts to http://siteAddress.xxx/api/post with the following JSON format:
+Although, a custom header "authentication_token" must be added with the authentification token found on user's page
+
+```json
+{
+   "body": "Message body",
+   "badge": "E",
+}
+```
+Badge is optionnal and can be :
+* E : Error
+* S : Success/OK
+* I : Info
+* W : Warning
+
+
+
+
+## Instructions to install
  * git clone
- * Edit setup to match you site-package...To be improved
+ * Edit setup.sh to match you site-package...To be improved
  * ./setup.sh
  * ./db_create.py
  * ./run.py
