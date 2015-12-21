@@ -25,6 +25,8 @@ Badge is optionnal and can be :
 ## Instructions to install
  * git clone
  * Edit setup.sh to match you site-package...To be improved
+ * cp misc/config.sample.py config.py
+ * Edit config.py to match your needs (SMTP server, SECRET_KEY, PASSWORD_SALT)
  * ./setup.sh
  * ./db_create.py
  * ./run.py

@@ -2,6 +2,7 @@
 
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask_mail import Mail
 from config import basedir
 import os
 
@@ -9,6 +10,9 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config.from_object('config')
+
+# Emails
+mail = Mail(app)
 
 # Database
 db = SQLAlchemy(app)

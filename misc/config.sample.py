@@ -31,9 +31,9 @@ SECURITY_POST_LOGOUT_VIEW = 'index'
 SECURITY_UNAUTHORIZED_VIEW = 'index'
 
 # Flask-Mail
-MAIL_SERVER = 'mail.iopush.net'
-MAIL_PORT = 587
+MAIL_SERVER = 'smtp.mail.net'
+MAIL_PORT = 25
 MAIL_USE_SSL = False
-MAIL_USE_TLS = True
-MAIL_USERNAME = 'contact@iopush.net'
-MAIL_PASSWORD = 'testmail33'
+MAIL_USE_TLS = False
+MAIL_USERNAME = 'email@email.net'
+MAIL_PASSWORD = 'password'
