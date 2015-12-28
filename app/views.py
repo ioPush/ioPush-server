@@ -14,7 +14,7 @@ from .forms import ExtendedRegisterForm
 
 # Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, None)
-security = Security(app, user_datastore, register_form=ExtendedRegisterForm)
+security = Security(app, user_datastore, confirm_register_form=ExtendedRegisterForm)
 
 
 

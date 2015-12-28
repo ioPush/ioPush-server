@@ -21,7 +21,7 @@ def init():
     app.config['SERVER_NAME'] = 'localhost'
     # DB creation
     db.create_all()
-    user = User(nickname='utest', email='utest@test.com', password='pptest', active=True)
+    user = User(nickname='utest', email='utest@test.com', password='pptest', active=True, confirmed_at=datetime.utcnow())
     db.session.add(user)
     db.session.commit()
     # Context setup
@@ -163,8 +163,8 @@ def test_post(init):
 def test_register(init):
     # Assert missing all
     r = app.test_client().post('/register', data={
-        'password': '',
         'nickname': '',
+        'password': '',
         'password_confirm': '',
         'email': ''
     }, follow_redirects=True)
@@ -175,24 +175,14 @@ def test_register(init):
     assert b'<title>Register' in data
     # Assert nickname already registered and no registration
     r = app.test_client().post('/register', data={
-        'password': 'azerty',
         'nickname': 'utest',
+        'password': 'azerty',
         'password_confirm': 'azerty',
         'email': 'user2@user.com'
     }, follow_redirects=True)
     data = r.get_data()
     assert b'Nickname already exists' in data
-    assert db.session.query(func.count(User.id)).scalar() == 1
-    # Assert registration succeded
-    r = app.test_client().post('/register', data={
-        'password': 'azerty',
-        'nickname': 'user',
-        'password_confirm': 'azerty',
-        'email': 'user2@user.com'
-    }, follow_redirects=True)
-    data = r.get_data()
-    assert b'<title>Home' in data
-    assert db.session.query(func.count(User.id)).scalar() == 2    
+    assert db.session.query(func.count(User.id)).scalar() == 1   
         
 def test_misc():
     # User repr
