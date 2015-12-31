@@ -60,10 +60,7 @@ def user(nickname):
     if nickname != current_user.nickname:
         flash('Wrong user')
         return redirect(url_for('index'))
-    user = User.query.filter_by(nickname=nickname).first()
-    if user == None:
-        flash('User %s not found.' % nickname)
-        return redirect(url_for('index')) 
+    user = User.query.filter_by(nickname=nickname).first() 
     posts = current_user.posts.order_by(desc(Post.timestamp)).all()
     return render_template('user.html',
                            user=user,

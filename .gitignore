@@ -7,3 +7,5 @@ db_repository/
 *.pyc
 .DS_Store
 *.log
+config.py
+
