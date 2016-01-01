@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from flask.ext.wtf import Form
 from wtforms import StringField, BooleanField
@@ -11,22 +11,22 @@ class ExtendedRegisterForm(RegisterForm):
     """ Add nickname field to the register's class
     """
     nickname = StringField('Nickname', [DataRequired()])
-    
+
     def validate(self):
         """ Add nickname validation
-        
+
             :return: True is the form is valid
         """
         # Use standart validator
         rv = Form.validate(self)
         if not rv:
             return False
-         
-        # Check if nickname already exists       
+
+        # Check if nickname already exists
         user = User.query.filter_by(
             nickname=self.nickname.data).first()
         if user is not None:
             self.nickname.errors.append('Nickname already exists')
             return False
-            
+
         return True
