@@ -1,4 +1,4 @@
-# ioPush-server
+# ioPush-server - [![Build Status](https://travis-ci.org/ioPush/ioPush-server.svg?branch=master)](https://travis-ci.org/ioPush/ioPush-server) [![Coverage Status](https://coveralls.io/repos/ioPush/ioPush-server/badge.svg?branch=master&service=github)](https://coveralls.io/github/ioPush/ioPush-server?branch=master)
 Log keeper and Android-GCM push notification server (Python)
 
 ## Description
