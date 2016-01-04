@@ -69,6 +69,22 @@ def user(nickname):
                            title='Profile')
 
 
+@app.route('/user/delete/<nickname>')
+@login_required
+def deleteUser(nickname):
+    """ Delete user account
+
+        :return: Redirection to index page
+    """
+    if nickname != current_user.nickname:
+        flash('Wrong user')
+        return redirect(url_for('index'))
+    user = User.query.filter_by(nickname=nickname).first()
+    user_datastore.delete_user(user)
+    user_datastore.commit()
+    return redirect(url_for('index'))
+
+
 @security.login_context_processor
 def login_register_processor():
     return dict(title='Log in')

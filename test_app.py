@@ -266,6 +266,8 @@ def test_user(init):
         assert b'login' not in data
         assert b'logout' in data
         assert b'<dt>Auth token</dt>' in data
+        assert b'<dt>Password' in data
+        assert b'<dt>Account' in data
 
         # Add posts and assert their display
         post = Post(body='Post 1',
@@ -321,3 +323,45 @@ def test_user(init):
         assert b'Wrong user' in data
         assert b'<div class="alert alert-info">' in data
         assert b'<button type="button" class="close" data-dismiss="alert">&times;</button>' in data
+
+
+def test_deleteUser(init):
+    # Uses same context to stay logged-in
+    with app.test_client() as c:
+        # Assert login
+        r = c.post(url_for('security.login'),
+                   data=dict(email='utest@test.com', password='pptest'),
+                   follow_redirects=True
+                   )
+        data = r.get_data()
+        assert r.status_code == 200
+        
+        # Assert other user non reachable
+        user = User(nickname='utest2',
+                    email='utest2@test.com',
+                    password='pptest2',
+                    active=True,
+                    confirmed_at=datetime.utcnow())
+        db.session.add(user)
+        db.session.commit()
+        r = c.get(url_for('deleteUser', nickname='utest2'))
+        data = r.get_data()
+        assert r.status_code == 302
+        assert b'<h1>Redirecting...</h1>' in data
+        assert b'<a href="/index">/index</a>' in data
+
+        # Assert flashed messsage
+        r = c.get(url_for('index'))
+        data = r.get_data()
+        assert r.status_code == 200
+        assert b'Wrong user' in data
+        assert b'<div class="alert alert-info">' in data
+        assert b'<button type="button" class="close" data-dismiss="alert">&times;</button>' in data
+        
+        # Assert user deleted
+        r = c.get(url_for('deleteUser', nickname='utest'))
+        data = r.get_data()
+        assert r.status_code == 302
+        assert b'<a href="/index">/index</a>' in data
+        user = User.query.filter_by(nickname='utest').first()
+        assert user is None
