@@ -1,0 +1,11 @@
+<p>Hello {{ user.nickname }} !</p>
+<p>
+  Your password has been changed.
+</p>
+{% if security.recoverable %}
+  <p>
+    If you did not change your password, <a href="{{ url_for_security('forgot_password', _external=True) }}">click here to reset it</a>.
+  </p>
+{% endif %}
+<br>
+<p>If you have any question you can send an email to <a href="mailto:contact@iopush.net">contact@ioPush.net</a>.</p>

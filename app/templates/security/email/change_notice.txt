@@ -1,0 +1,10 @@
+Hello {{ user.nickname }} !
+
+Your password has been changed.
+
+{% if security.recoverable %}
+If you did not change your password, use the following link:
+{{ url_for_security('forgot_password', _external=True) }}
+{% endif %}
+
+If you have any question you can send an email to contact@ioPush.net.

@@ -1,0 +1,6 @@
+Hello {{ user.nickname }} !
+
+Your password have been reset, you can now log to ioPush with : {{ url_for_security('login', _external=True) }}
+
+
+If you have any question you can send an email to contact@ioPush.net

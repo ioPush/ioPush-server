@@ -1,0 +1,9 @@
+Hello {{ user.nickname }} !
+
+You just asked for your password, and you will have to work hard for it !
+Or just use the link below:
+
+{{ reset_link }}
+
+
+If you have any question you can send an email to contact@ioPush.net

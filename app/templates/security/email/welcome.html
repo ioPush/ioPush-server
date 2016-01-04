@@ -1,0 +1,14 @@
+<p>Welcome {{ user.nickname }} !</p>
+<p>
+  You just registered to ioPush, with the email adress {{ user.email }}. <br >
+  As a reminder, the website is <a href="{{ url_for('index', _external=True) }}">here</a> !
+</p>
+{% if security.confirmable %}
+  <p>There is a last step to do before enjoying the application, confirm your email through the link below:</p>
+  <p><a href="{{ confirmation_link }}">Confirm my account</a></p>
+  <br>
+  <p>Or copy/paste the link below in a web browser</p>
+  <p>{{ confirmation_link }}<p>
+{% endif %}
+<br>
+<p>If you have any question you can send an email to <a href="mailto:contact@iopush.net">contact@ioPush.net</a>.</p>
