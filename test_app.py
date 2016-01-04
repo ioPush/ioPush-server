@@ -69,6 +69,7 @@ def test_loginOut(init):
     assert b'Please log in' in data
     assert b'login' in data
     assert b'logout' not in data
+    assert b'role="button">Lost password</a>' in data
 
     # Assert wrong login
     r = login('wrongUser', 'wrongPassword')

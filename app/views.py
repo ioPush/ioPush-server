@@ -86,3 +86,11 @@ def change_password_register_processor():
 @security.send_confirmation_context_processor
 def send_confirmation_register_processor():
     return dict(title='Confirm email')
+    
+@security.reset_password_context_processor
+def reset_password_register_processor():
+    return dict(title='Reset password')
+    
+@security.forgot_password_context_processor
+def forgot_password_context_processor():
+    return dict(title='Lost password')
