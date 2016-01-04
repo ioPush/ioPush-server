@@ -71,14 +71,18 @@ def user(nickname):
 
 @security.login_context_processor
 def login_register_processor():
-    return dict(title="Log in")
+    return dict(title='Log in')
 
 
 @security.register_context_processor
 def register_register_processor():
-    return dict(title="Register")
+    return dict(title='Register')
 
 
 @security.change_password_context_processor
 def change_password_register_processor():
-    return dict(title="Change password")
+    return dict(title='Change password')
+    
+@security.send_confirmation_context_processor
+def send_confirmation_register_processor():
+    return dict(title='Confirm email')
