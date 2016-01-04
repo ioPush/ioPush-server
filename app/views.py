@@ -8,7 +8,7 @@ from flask.ext.security import Security, SQLAlchemyUserDatastore, \
         login_required, current_user, auth_token_required
 from sqlalchemy import desc
 from app import app, db
-from .models import User, Post
+from .models import User, Post, Device
 from .forms import ExtendedRegisterForm
 
 
@@ -35,7 +35,8 @@ def index():
 def post():
     """ API end point to post a JSON message.
 
-        Body : Text to be stored/push
+        body : Text to be stored/push
+        badge : Badge to display (OK : S - Info : I - Warning : W - Error : E)
 
         :return: 'ok' if success, an error otherwise
     """
@@ -47,6 +48,29 @@ def post():
     post = Post(body=body, timestamp=datetime.utcnow(),
                 userId=current_user.id, badge=badge)
     db.session.add(post)
+    db.session.commit()
+    return 'ok'
+
+
+@app.route('/api/addDevice', methods=['POST'])
+@auth_token_required
+def addDevice():
+    """ API end point to add a device.
+
+        service : Service to be registered, only AndroidGCM for now
+        regId : Registration Id
+
+        :return: 'ok' if success, an error otherwise
+    """
+    data = request.get_json(force=True, silent=False)
+    service = data.get('service', None)
+    if service is None:
+        return 'No "service" tag found'
+    regId = data.get('regId', None)
+    if regId is None:
+        return 'No "regId" tag found'
+    device = Device(service=service, regId=regId, userId=current_user.id)
+    db.session.add(device)
     db.session.commit()
     return 'ok'
 

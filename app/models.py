@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     active = db.Column(db.Boolean())
     confirmed_at = db.Column(db.DateTime())
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    devices = db.relationship('Device', backref='owner', lazy='dynamic')
 
     def get_id(self):
         try:
@@ -44,3 +45,13 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post %r>' % (self.body)
+
+
+class Device(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    service = db.Column(db.String(10))
+    regId = db.Column(db.String(256))
+    userId = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
+    def __repr__(self):
+        return '<Device %r>' % (self.regID)

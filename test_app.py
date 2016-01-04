@@ -365,3 +365,56 @@ def test_deleteUser(init):
         assert b'<a href="/index">/index</a>' in data
         user = User.query.filter_by(nickname='utest').first()
         assert user is None
+
+
+def test_addDevice(init):
+    user = User.query.filter_by(nickname='utest').first()
+
+    # Assert not authorised
+    r = app.test_client().post(url_for('addDevice'),
+                               data='{"wrong": "message"}',
+                               follow_redirects=True)
+    data = r.get_data()
+    assert r.status_code == 401
+    assert b'<h1>Unauthorized</h1>' in data
+
+    # Assert bad request
+    r = app.test_client().post(
+                url_for('addDevice'),
+                data='',
+                headers={'authentication_token': user.get_auth_token()},
+                follow_redirects=True)
+    assert r.status_code == 400
+
+    # Assert no service tag found
+    r = app.test_client().post(
+                url_for('addDevice'),
+                data='{"regId": "fg79Ffg8iovwa"}',
+                headers={'authentication_token': user.get_auth_token()},
+                follow_redirects=True)
+    data = r.get_data()
+    assert r.status_code == 200
+    assert data == b'No "service" tag found'
+
+    # Assert no regId tag found
+    r = app.test_client().post(
+                url_for('addDevice'),
+                data='{"service": "AndroidGCM"}',
+                headers={'authentication_token': user.get_auth_token()},
+                follow_redirects=True)
+    data = r.get_data()
+    assert r.status_code == 200
+    assert data == b'No "regId" tag found'
+
+    # Assert added device
+    r = app.test_client().post(
+                url_for('addDevice'),
+                data='{"service": "AndroidGCM", "regId": "fg79Ffg8iovwa"}',
+                headers={'authentication_token': user.get_auth_token()},
+                follow_redirects=True)
+    data = r.get_data()
+    assert r.status_code == 200
+    assert data == b'ok'
+    devices = user.devices.all()
+    assert devices[0].service == 'AndroidGCM'
+    assert devices[0].regId == 'fg79Ffg8iovwa'
