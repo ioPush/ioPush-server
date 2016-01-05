@@ -418,3 +418,18 @@ def test_addDevice(init):
     devices = user.devices.all()
     assert devices[0].service == 'AndroidGCM'
     assert devices[0].regId == 'fg79Ffg8iovwa'
+    
+    # Assert unique regId
+    r = app.test_client().post(
+                url_for('addDevice'),
+                data='{"service": "AndroidGCM", "regId": "fg79Ffg8iovwa"}',
+                headers={'authentication_token': user.get_auth_token()},
+                follow_redirects=True)
+    data = r.get_data()
+    assert r.status_code == 200
+    assert data == b'Device already registered'
+    devices = user.devices.all()
+    assert devices[0].service == 'AndroidGCM'
+    assert devices[0].regId == 'fg79Ffg8iovwa'
+    with pytest.raises(IndexError):
+        assert devices[1] is None
