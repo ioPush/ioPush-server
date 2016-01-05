@@ -54,4 +54,4 @@ class Device(db.Model):
     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     
     def __repr__(self):
-        return '<Device %r>' % (self.regID)
+        return '<Device %r>' % (self.regId)

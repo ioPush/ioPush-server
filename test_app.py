@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime
 from config import basedir
 from app import app, db
-from app.models import User, Post
+from app.models import User, Post, Device
 import flask
 from flask import url_for
 from sqlalchemy import func
@@ -236,6 +236,10 @@ def test_misc():
     # Assert Post repr
     post = Post(body='message abc', timestamp=datetime.utcnow(), userId=1)
     assert str(post) == "<Post 'message abc'>"
+    
+    # Assert Device repr
+    device = Device(regId='fg79Ffg8iovwa', service='AndroidGCM', userId=1)
+    assert str(device) == "<Device 'fg79Ffg8iovwa'>"
 
 
 def test_user(init):
