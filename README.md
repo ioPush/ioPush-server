@@ -7,7 +7,7 @@ To be used with a soon to arrive Android push application
 ## Description
 Work in progress but user management works, and API to post messages too.
 
-Messages can be post to http://siteAddress.xxx/api/post with the following JSON format.  
+Messages can be post to https://iopush.net/app/api/post with the following JSON format.  
 Although, a custom header "authentication_token" must be added with the authentification token found on user's page
 
 ```json
@@ -22,7 +22,7 @@ Badge is optionnal and can be :
 * I : Info
 * W : Warning
 
-
+See examples following for more help.
 
 
 ## Instructions to install
@@ -47,3 +47,21 @@ So the it should be able to:
  * Android application -> receive notifications - Tested in the [1st version](https://github.com/Oliv4945/ioPush)
  * Android application -> display user's record
  * Obvioulsy, have a nice design. But I am far away from being a good designer, so if some people want to help or submit pull request, your are welcome !
+
+## Examples to send data
+### Curl
+Just use the following:
+```bash
+curl -X POST -H 'authentication_token: YourAuthToken' -d '{"body": "Message send with curl", "badge": "I"}' https://iopush.net/app/api/post
+```
+### Node-Red
+ * Paste (Menu->Import->Clipboard) the following subflow in [Node-Red](http://nodered.org).
+ * Edit the subflow, then modify "Add notification data" to set your server url and your Auth_Token 
+ * That's all. The message's payload will be send to the server, and you can add a badge by adding a msg.badge property
+```JSON
+[{"id":"adeebf25.52114","type":"subflow","name":"ioPush","in":[{"x":70,"y":70,"wires":[{"id":"43d1e4b1.bc2e1c"}]}],"out":[{"x":569,"y":108,"wires":[{"id":"a9684432.5697b8","port":0}]}]},{"id":"43d1e4b1.bc2e1c","type":"function","name":"Add notification data","func":"msg2 = {};\nmsg2.payload = {};\nmsg2.url = \"https://iopush.net/app/api/post\";\nmsg2.method = \"POST\";\nmsg2.headers = {\"authentication_token\": \"Your auth token\"};\nmsg2.payload.body = msg.payload;\nmsg2.payload.badge = msg.badge;\nreturn msg2;","outputs":1,"noerr":0,"x":220,"y":70,"z":"adeebf25.52114","wires":[["31652b4f.ce9ad4"]]},{"id":"31652b4f.ce9ad4","type":"json","name":"","x":413,"y":71,"z":"adeebf25.52114","wires":[["a9684432.5697b8"]]},{"id":"a9684432.5697b8","type":"http request","name":"","method":"use","ret":"txt","url":"","x":447,"y":113,"z":"adeebf25.52114","wires":[[]]},{"id":"939cc31a.6c634","type":"subflow:adeebf25.52114","name":"","x":205,"y":356,"z":"3c426b18.c3bd94","wires":[[]]}]
+```
+### Sigfox - Arduino/Akeru
+Just configure the Sigfox callback like the following picture.  
+The "Custom payload config" is quite helpfull to format data.  
+![alt-tag](https://iobook.net/jirafeau/f.php?h=1aN00QTO&p=1&k=e80f653d99)
