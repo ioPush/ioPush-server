@@ -133,6 +133,11 @@ def test_loginOut(init):
 
 def test_post(init):
     user = User.query.filter_by(nickname='utest').first()
+    r = app.test_client().post(
+            url_for('addDevice'),
+            data='{"service": "AndroidGCM", "regId": "fg79Ffg8iovwa"}',
+            headers={'authentication_token': user.get_auth_token()},
+            follow_redirects=True)
 
     # Assert not authorised
     r = app.test_client().post(url_for('post'),

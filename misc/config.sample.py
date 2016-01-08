@@ -42,3 +42,7 @@ MAIL_USE_SSL = False
 MAIL_USE_TLS = False
 MAIL_USERNAME = 'email@email.net'
 MAIL_PASSWORD = 'password'
+
+# Android GCM
+GCM_API_KEY = 'YourGCMApiKey'
+GCM_PROXY = 'http://host:port'  # or dict {'https':'host:port'} - Optional

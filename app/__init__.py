@@ -4,6 +4,7 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from config import basedir
+from gcm import GCM
 import os
 
 # Application
@@ -16,6 +17,9 @@ mail = Mail(app)
 
 # Database
 db = SQLAlchemy(app)
+
+# GCM
+gcm = GCM(app.config['GCM_API_KEY'], proxy=app.config.get('GCM_PROXY', None))
 
 # Log to file if the application is not in debug
 if not app.debug:

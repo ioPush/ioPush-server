@@ -18,6 +18,7 @@ pbr==1.8.1
 py==1.4.31
 pytest==2.8.4
 pytest-cov==2.2.0
+python-gcm==0.3
 six==1.10.0
 SQLAlchemy==1.0.9
 sqlalchemy-migrate==0.10.0

@@ -7,7 +7,7 @@ from flask import render_template, flash, redirect, session, \
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
         login_required, current_user, auth_token_required
 from sqlalchemy import desc
-from app import app, db
+from app import app, db, gcm
 from .models import User, Post, Device
 from .forms import ExtendedRegisterForm
 
@@ -49,6 +49,7 @@ def post():
                 userId=current_user.id, badge=badge)
     db.session.add(post)
     db.session.commit()
+    sendMessageGCM(body, current_user)
     return 'ok'
 
 
@@ -137,3 +138,37 @@ def reset_password_register_processor():
 @security.forgot_password_context_processor
 def forgot_password_context_processor():
     return dict(title='Lost password')
+
+
+def sendMessageGCM(message, user):
+    """Send the push message to a user or all users if 'user' is not passed
+    
+    :param message: Message to send
+    :param user: User to send, None if the message is for all
+    """
+
+    devices = user.devices.all()
+    if devices:
+        data = {'text': message}
+        regIds = [ device.regId for device in devices if device.service == "AndroidGCM" ]
+        response = gcm.json_request(registration_ids=regIds, data=data)
+    
+        # Errors, delete the device
+        if response and 'errors' in response:
+            for error, regIds in response['errors'].items():
+                if error in ['NotRegistered', 'InvalidRegistration']:
+                    for regId in regIds:
+                        Device.query.filter_by(regId=regId).delete()
+                        db.session.commit()
+        # Canonical answer, update the user
+        if response and 'canonical' in response:
+            for regId, canonicalId in response['canonical'].items():
+                device = Device.query.filter_by(regId=regId).first()
+                device.regId = canonicalId
+                db.session.commit()
+        # Successfull calls - Code left just in case...
+        '''
+        if response and 'success' in response:
+            for regIds, successId in response['success'].items():
+                print('SUCCESS for regID %s' % regIds)
+        '''
