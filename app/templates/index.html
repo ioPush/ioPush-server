@@ -5,6 +5,53 @@
     <!-- <h1>Hi {{ current_user.nickname }}</h1>-->
     <!-- {% include 'flash.html' %} -->
     <div class="well">
-    Iot connection...
+      <h1>ioPush ? What ?</h1>
+      <p> It is an application dedicated to the Internet of Things and all birds singing on the internet.
+      </p>
+      <h3>Good, but what is it doing ?</h3>
+        <ul>
+          <li>It is a logbook for all posted messages</li>
+          <li>It can send push notification to Android device if asked</li>
+        </ul>
+      <h3>That's all ?</h3>
+      <p>Yes, ioPush is designed to be simple and easy to use, it does two jobs for now but do it well !
+      </p>
+      <h3>What is the point ?</h3>
+      <p>You can log everything you want, even when your step mother's phone crossing your doorway :)<br>
+        Another example : You can log some home automation events like
+        <ul>
+          <li>Sensor's out of battery warning</li>
+          <li>Pollution data over a threshold</li>
+          <li>Your 3D printer has finish its job></li>
+          <li>Server down</li>
+          <li>Motion sensor triggered</li>
+          <li>A new mail is inside your mailbox</li>
+          <li>Whatever you want to be written :)</li>
+        </ul>
+        It can be usefull to have all those information for the past hours in one page. Moreover, you can chose to receive some by push notification on your phone !
+      </p>
+      <h3>Great where should I start ?</h3>
+      <p>Just register and send messages, it is free !<br>
+        Be carreful: it should not append, but the service is in beta test so the database might be erased from time to time.</p>
+      <h3>But how can I send messages</h3>
+      <p>Just send a post request, everything is described <a href="https://github.com/ioPush/ioPush-server#usage">here</a>, with some <a href="https://github.com/ioPush/ioPush-server#examples-to-send-data">examples</a> :)<br>
+        Your auth_token can be found on user's page, it changes everytime you load the page, but olders are valid until you change your password.
+      </p>
+      <h3>It is wonderfull, but I don't know how to do it with my device...</h3>
+      <p><a href="mailto:coxyantact@iopuxyash.nexyat"
+    onmouseover="this.href=this.href.replace(/xya/g,'');">Send an email</a>, I might help.</p>
+      <h3>And for push notifications ?</h3>
+      <p>It is currently in test,  <a href="mailto:coxyantact@iopuxyash.nexyat"
+    onmouseover="this.href=this.href.replace(/xya/g,'');">send me something</a> if you want to be a part of it</p>
+      <h3>I found a bug or want a new functionnality !</h3>
+      <p><a href="mailto:coxyantact@iopuxyash.nexyat"
+    onmouseover="this.href=this.href.replace(/xya/g,'');">Send me an email</a> or open an issue/pull request on <a href="https://github.com/ioPush/ioPush-server/issues">Github</a>.
+      </p>
+      <h3>And about privacy ?</h3>
+      <p>Nobody will look to your data, but all source code is on github, so you can <a href="https://github.com/ioPush/ioPush-server#instructions-to-install">Github</a> your own server where you want !
+      </p>
+      <h3>Good idea, but the design is ugly</h3>
+      <p>True ! Please help to improve this part as I am far away from a good designer...
+      </p>
     </div>
 {% endblock %}
