@@ -6,9 +6,11 @@ To be used with a soon to arrive Android push application
 
 ## Description
 Work in progress but user management works, and API to post messages too.
+A test server is in place : [ioPush.net](https://iopush.net/app)
 
-Messages can be post to https://iopush.net/app/api/post with the following JSON format.  
-Although, a custom header "authentication_token" must be added with the authentification token found on user's page
+## Usage
+Messages can be post to `https://iopush.net/app/api/post` with the following JSON format.  
+Although, a custom header `authentication_token` must be added with the authentification token found on user's page
 
 ```json
 {
@@ -22,7 +24,8 @@ Badge is optionnal and can be :
 * I : Info
 * W : Warning
 
-See examples following for more help.
+See [examples](#examples-to-send-data) for more help.
+For now only secured connections are accepted, but an insecure API should be available soon.
 
 
 ## Instructions to install
@@ -37,7 +40,7 @@ See examples following for more help.
  * Login with user 123
  
 ## Why this software and what it should do
-It is a part of my home automation system. I previoulsy used Twitter to keep record of warning/errors but it lacks some functionnalities, and since few months notifications does not works well on my phone.
+It is a part of my home automation system. I previoulsy used Twitter as a logbook of warning/errors but it lacks some functionnalities, and since few months notifications does not works well on my phone.
 
 So the it should be able to:
  * Keep record of events - Done
