@@ -45,4 +45,4 @@ MAIL_PASSWORD = 'password'
 
 # Android GCM
 GCM_API_KEY = 'YourGCMApiKey'
-GCM_PROXY = 'http://host:port'  # or dict {'https':'host:port'} - Optional
+# GCM_PROXY = 'http://host:port' or dict {'https':'host:port'} - Optional
