@@ -26,8 +26,8 @@ Badge is optionnal and can be :
 * W : Warning  
 Push is optionnal, if set to `True` a push notification will be send to all user's devices.
 
-See [examples](#examples-to-send-data) for more help.
-For now only secured connections are accepted, but an insecure API should be available soon.
+See [examples](#examples-to-send-data) for more help.  
+Insecure http:// connection is accepted only for `/app/api/post`request to let device that dont support SSL post messages. If feasible, use https:// secured connection.
 
 
 ## Instructions to install
@@ -59,6 +59,7 @@ Just use the following:
 ```bash
 curl -X POST -H 'authentication_token: YourAuthToken' -d '{"body": "Message send with curl", "badge": "I", "push": "True"}' https://iopush.net/app/api/post
 ```
+
 ### Node-Red
  * Paste (Menu->Import->Clipboard) the following subflow in [Node-Red](http://nodered.org).
  * Edit the subflow, then modify "Add notification data" to set your server url and your Auth_Token 
@@ -69,6 +70,10 @@ curl -X POST -H 'authentication_token: YourAuthToken' -d '{"body": "Message send
 ```JSON
 [{"id":"adeebf25.52114","type":"subflow","name":"ioPush","in":[{"x":70,"y":70,"wires":[{"id":"43d1e4b1.bc2e1c"}]}],"out":[{"x":569,"y":108,"wires":[{"id":"a9684432.5697b8","port":0}]}]},{"id":"43d1e4b1.bc2e1c","type":"function","name":"Add notification data","func":"msg2 = {};\nmsg2.payload = {};\nmsg2.url = \"https://iobook.net/app/api/post\";\nmsg2.method = \"POST\";\nmsg2.headers = {\"authentication_token\": \"YourAuthToken\"};\nmsg2.payload.body = msg.payload;\nmsg2.payload.badge = msg.badge;\nmsg2.payload.push = msg.push;\nreturn msg2;","outputs":1,"noerr":0,"x":220,"y":70,"z":"adeebf25.52114","wires":[["31652b4f.ce9ad4"]]},{"id":"31652b4f.ce9ad4","type":"json","name":"","x":413,"y":71,"z":"adeebf25.52114","wires":[["a9684432.5697b8"]]},{"id":"a9684432.5697b8","type":"http request","name":"","method":"use","ret":"txt","url":"","x":447,"y":113,"z":"adeebf25.52114","wires":[[]]},{"id":"939cc31a.6c634","type":"subflow:adeebf25.52114","name":"","x":205,"y":356,"z":"3c426b18.c3bd94","wires":[["401e9113.bfe17"]]}]
 ```
+
+### Arduino
+See [this code](https://gist.github.com/Oliv4945/90a24612998153e7ae0d)
+
 ### Sigfox - Arduino/Akeru
 Just configure the Sigfox callback like the following picture.  
 The "Custom payload config" is quite helpfull to format data.  
