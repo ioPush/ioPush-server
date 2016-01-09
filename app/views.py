@@ -45,11 +45,13 @@ def post():
     if body is None:
         return 'No "body" tag found'
     badge = data.get('badge', None)
+    push = data.get('push', None)
     post = Post(body=body, timestamp=datetime.utcnow(),
                 userId=current_user.id, badge=badge)
     db.session.add(post)
     db.session.commit()
-    sendMessageGCM(body, current_user)
+    if push == 'True':
+        sendMessageGCM(body, current_user)
     return 'ok'
 
 
