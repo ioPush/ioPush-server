@@ -6,6 +6,7 @@ from flask import render_template, flash, redirect, session, \
         url_for, request, g
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
         login_required, current_user, auth_token_required
+from flask_security.signals import user_registered
 from sqlalchemy import desc
 from app import app, db, gcm
 from .models import User, Post, Device
@@ -140,6 +141,15 @@ def reset_password_register_processor():
 @security.forgot_password_context_processor
 def forgot_password_context_processor():
     return dict(title='Lost password')
+
+
+@user_registered.connect_via(app)
+def on_user_registerd(app, user, confirm_token):
+    post = Post(body='First post to your logbook', timestamp=datetime.utcnow(),
+                userId=user.id, badge='S')
+    db.session.add(post)
+    db.session.commit()
+    app.logger.info('New user "%s" - Email : %s' % (user.nickname, user.email) )
 
 
 def sendMessageGCM(message, user):
