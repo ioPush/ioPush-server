@@ -3,11 +3,17 @@
 import pytest
 from datetime import datetime
 from config import basedir
-from app import app, db
+from app import app, db, security
 from app.models import User, Post, Device
 import flask
 from flask import url_for
 from sqlalchemy import func
+
+
+# Catch emails, in order to avoid sending them
+@security.send_mail_task
+def send_email(msg):
+  app.mail_sent = True
 
 
 @pytest.yield_fixture()
@@ -225,9 +231,19 @@ def test_register(init):
     assert b'Nickname already exists' in data
     assert db.session.query(func.count(User.id)).scalar() == 1
     # Overide email sending - TODO
-    # @app.security.send_mail_task
-    # def send_email(msg):
-    #     app.mail_sent = True
+    r = app.test_client().post('/register', data={
+        'nickname': 'utest2',
+        'password': 'dfgnwxi',
+        'password_confirm': 'dfgnwxi',
+        'email': 'user2@iobook.net'
+    }, follow_redirects=True)
+    data = r.get_data()
+    assert b'Thank you. Confirmation instructions have been sent to user2@iobook.net' in data
+    assert db.session.query(func.count(User.id)).scalar() == 2
+    # Assert first post added
+    user = User.query.filter_by(nickname='utest2').first()
+    posts = user.posts.all()
+    assert posts[0].body == 'First post to your logbook'
 
 
 def test_misc():

@@ -5,6 +5,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from config import basedir
 from gcm import GCM
+from flask.ext.security import Security, SQLAlchemyUserDatastore
 import os
 
 # Application
@@ -12,14 +13,21 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config.from_object('config')
 
+# Database
+db = SQLAlchemy(app)
+from .models import User
+from .forms import ExtendedRegisterForm
+
 # Emails
 mail = Mail(app)
 
-# Database
-db = SQLAlchemy(app)
-
 # GCM
 gcm = GCM(app.config['GCM_API_KEY'], proxy=app.config.get('GCM_PROXY', None))
+
+# Flask-Security
+user_datastore = SQLAlchemyUserDatastore(db, User, None)
+security = Security(app, user_datastore,
+                    confirm_register_form=ExtendedRegisterForm)
 
 # Log to file if the application is not in debug
 if not app.debug:

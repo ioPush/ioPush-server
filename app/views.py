@@ -4,19 +4,16 @@ from datetime import datetime
 from os import urandom
 from flask import render_template, flash, redirect, session, \
         url_for, request, g
-from flask.ext.security import Security, SQLAlchemyUserDatastore, \
-        login_required, current_user, auth_token_required
+from flask.ext.security import login_required, \
+        current_user, auth_token_required
 from flask_security.signals import user_registered
 from sqlalchemy import desc
-from app import app, db, gcm
+from app import app, db, gcm, security, user_datastore
 from .models import User, Post, Device
-from .forms import ExtendedRegisterForm
 
 
-# Flask-Security
-user_datastore = SQLAlchemyUserDatastore(db, User, None)
-security = Security(app, user_datastore,
-                    confirm_register_form=ExtendedRegisterForm)
+
+
 
 
 @app.route('/')
