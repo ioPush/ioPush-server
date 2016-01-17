@@ -6,7 +6,8 @@ from flask import render_template, flash, redirect, session, \
         url_for, request, g
 from flask.ext.security import login_required, \
         current_user, auth_token_required
-from flask_security.signals import user_registered
+from flask_security.signals import user_registered, \
+        password_reset, password_changed
 from sqlalchemy import desc
 from app import app, db, gcm, security, user_datastore
 from .models import User, Post, Device
@@ -117,11 +118,9 @@ def deleteUser(nickname):
 def login_register_processor():
     return dict(title='Log in')
 
-
 @security.register_context_processor
 def register_register_processor():
     return dict(title='Register')
-
 
 @security.change_password_context_processor
 def change_password_register_processor():
@@ -142,12 +141,30 @@ def forgot_password_context_processor():
 
 @user_registered.connect_via(app)
 def on_user_registerd(app, user, confirm_token):
+    """ Catches new user registered, add first post and auth_token
+
+        parameters : Sent by flask-Security
+    """
+    # Add first post
     post = Post(body='First post to your logbook', timestamp=datetime.utcnow(),
                 userId=user.id, badge='S')
     db.session.add(post)
     db.session.commit()
+    # Store auth_token
+    user.auth_token = user.get_auth_token()
+    db.session.commit()
+    # Log new user
     app.logger.info('New user "%s" - Email : %s' % (user.nickname, user.email) )
 
+#@password_reset.connect_via(app)
+@password_changed.connect_via(app)
+def on_password_changed(app, user):
+    """ Catches password changes, update user's auth_token
+
+        parameters : Sent by flask-Security
+    """
+    user.auth_token = user.get_auth_token()
+    db.session.commit()
 
 def sendMessageGCM(message, user):
     """Send the push message to a user or all users if 'user' is not passed

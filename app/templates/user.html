@@ -7,7 +7,7 @@
   </div>
   <dl class="dl-horizontal">
     <dt>Email</dt><dd>{{ user.email }}</dd>
-    <dt>Auth token</dt><dd>{{ user.get_auth_token() }}</dd>
+    <dt>Auth token</dt><dd>{{ user.auth_token }}</dd>
     <dt>Password</dt><dd><a class="btn btn-default btn-xs" href="{{ url_for('security.change_password') }}" role="button">Change</a></dd>
     <dt>Account</dt><dd><a class="btn btn-default btn-xs" href="{{ url_for('deleteUser', nickname=current_user.nickname) }}" role="button">Delete</a></dd>
   </dl>

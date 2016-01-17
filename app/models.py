@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())
     confirmed_at = db.Column(db.DateTime())
+    auth_token = db.Column(db.String(255))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     devices = db.relationship('Device', backref='owner', lazy='dynamic')
 

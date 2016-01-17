@@ -31,7 +31,8 @@ def init():
                 email='utest@test.com',
                 password='pptest',
                 active=True,
-                confirmed_at=datetime.utcnow())
+                confirmed_at=datetime.utcnow(),
+                auth_token='d')
     db.session.add(user)
     db.session.commit()
     # Context setup
@@ -51,7 +52,14 @@ def login(email, password):
 
 def test_index(init):
     # Assert first page without login-in
-    r = app.test_client().get(url_for('index'))
+    r = app.test_client().get('index')
+    data = r.get_data()
+    assert r.status_code == 200
+    assert b'login' in data
+    assert b'logout' not in data
+    assert b'<title>Home' in data
+    # Assert it with '/' adress
+    r = app.test_client().get('/')
     data = r.get_data()
     assert r.status_code == 200
     assert b'login' in data
@@ -215,6 +223,7 @@ def test_register(init):
         'email': ''
     }, follow_redirects=True)
     data = r.get_data()
+    assert r.status_code == 200
     assert b'This field is required.' in data
     assert b'Email not provided' in data
     assert b'Password not provided' in data
@@ -228,17 +237,19 @@ def test_register(init):
         'email': 'user2@user.com'
     }, follow_redirects=True)
     data = r.get_data()
+    assert r.status_code == 200
     assert b'Nickname already exists' in data
     assert db.session.query(func.count(User.id)).scalar() == 1
-    # Overide email sending - TODO
+    # Register user
     r = app.test_client().post('/register', data={
         'nickname': 'utest2',
         'password': 'dfgnwxi',
         'password_confirm': 'dfgnwxi',
-        'email': 'user2@iobook.net'
+        'email': 'user2@user.com'
     }, follow_redirects=True)
     data = r.get_data()
-    assert b'Thank you. Confirmation instructions have been sent to user2@iobook.net' in data
+    assert r.status_code == 200
+    assert b'Thank you. Confirmation instructions have been sent to user2@user.com' in data
     assert db.session.query(func.count(User.id)).scalar() == 2
     # Assert first post added
     user = User.query.filter_by(nickname='utest2').first()
@@ -458,3 +469,51 @@ def test_addDevice(init):
     assert devices[0].regId == 'fg79Ffg8iovwa'
     with pytest.raises(IndexError):
         assert devices[1] is None
+
+
+def test_auth_token(init):
+    # Register user
+    r = app.test_client().post('/register', data={
+        'nickname': 'utest2',
+        'password': 'dfgnwxi',
+        'password_confirm': 'dfgnwxi',
+        'email': 'user2@user.com'
+    }, follow_redirects=True)
+    data = r.get_data()
+    assert r.status_code == 200
+    # Confirm it
+    user = User.query.filter_by(nickname='utest2').first()
+    user.confirmed_at=datetime.utcnow()
+    db.session.commit()
+    
+    with app.test_client() as c:
+        # Login
+        r = c.post(url_for('security.login'),
+            data=dict(email='user2@user.com', password='dfgnwxi'),
+            follow_redirects=True)
+        # Get user page and store it
+        r = c.get(url_for('user', nickname='utest2'))
+        data = r.get_data()
+        assert r.status_code == 200
+        data_previous = data
+        # Get user page and compare it
+        r = c.get(url_for('user', nickname='utest2'))
+        data = r.get_data()
+        assert r.status_code == 200
+        assert data_previous == data
+        # Change password
+        r = c.post(url_for('security.change_password'),
+            data=dict(password='dfgnwxi', new_password='1256Ga', new_password_confirm='1256Ga'),
+            follow_redirects=True)
+        assert r.status_code == 200
+        # Get user page and compare it
+        r = c.get(url_for('user', nickname='utest2'))
+        data = r.get_data()
+        assert r.status_code == 200
+        assert data_previous != data
+        # Another time
+        data_previous = data
+        r = c.get(url_for('user', nickname='utest2'))
+        data = r.get_data()
+        assert r.status_code == 200
+        assert data_previous == data
