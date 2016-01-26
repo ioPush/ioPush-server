@@ -12,7 +12,7 @@ Work in progress but basic service works :
 A test server is in place : [ioPush.net](https://iopush.net/app)
 
 ## Usage
-Messages can be posted to `https://iopush.net/app/api/post` with the following JSON format.  
+Messages can be posted with a POST request to `https://iopush.net/app/api/post` with the following JSON format.  
 Although, a custom header `authentication_token` must be added with the authentification token found on user's page.
 
 ```json
@@ -29,7 +29,7 @@ Badge is optionnal and can be :
 * W : Warning  
 Push is optionnal, if set to `True` a push notification will be send to all user's devices.
 
-See [examples](#examples-to-send-data) for more help.  
+See [examples](#examples-to-send-data) for more help, a GET request also works.  
 Insecure `http://` connection is accepted only for `/app/api/post` endpoint, in order to allow devices that dont support SSL to post messages. If feasible, use `https://` secured connection.
 
 
@@ -58,6 +58,13 @@ So the it should be able to:
  * Obvioulsy, have a nice design. But I am far away from being a good designer, so if some people want to help or submit pull request, your are welcome !
 
 ## Examples to send data
+All examples are for POST request as issue a GET is most often simple. If you need some help just ask me or open an issue.
+### Get
+Test it in a browser with the following URL.  
+When you implement a get request, be sure that the URL is percent encoded. The authentification token parameter must be `auth_token`
+```
+https://iobook.net/api/post?auth_token=YourAuthToken&body=Message&badge=S
+```
 ### Curl
 Just use the following:
 ```bash
