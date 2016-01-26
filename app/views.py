@@ -29,7 +29,7 @@ def index():
                            user=user)
 
 
-@app.route('/api/post', methods=['POST'])
+@app.route('/api/post', methods=['GET', 'POST'])
 @auth_token_required
 def post():
     """ API end point to post a JSON message.
@@ -39,7 +39,10 @@ def post():
 
         :return: 'ok' if success, an error otherwise
     """
-    data = request.get_json(force=True, silent=False)
+    if request.method == 'POST':
+        data = request.get_json(force=True, silent=False)
+    else:
+        data = request.args
     body = data.get('body', None)
     if body is None:
         return 'No "body" tag found'
