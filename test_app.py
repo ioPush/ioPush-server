@@ -207,9 +207,22 @@ def test_post(init):
     assert posts[1].timestamp is not None
     assert posts[1].badge is 'I'
     
+    # Assert post with GET method
+    r = app.test_client().get(
+                url_for('post'),
+                query_string={'body': 'message abc 3', 'badge': 'S', 'auth_token': user.get_auth_token()},
+                follow_redirects=True)
+    data = r.get_data()
+    assert r.status_code == 200
+    assert data == b'ok'
+    posts = user.posts.all()
+    assert posts[2].body == 'message abc 3'
+    assert posts[2].timestamp is not None
+    assert posts[2].badge is 'S'
+    
     # Assert post without badge
     with pytest.raises(IndexError):
-        assert posts[2] is None
+        assert posts[3] is None
     r = app.test_client().post(
                 url_for('post'),
                 data='{"body": "message abcd"}',
@@ -219,13 +232,13 @@ def test_post(init):
     assert r.status_code == 200
     assert data == b'ok'
     posts = user.posts.all()
-    assert posts[2].body == 'message abcd'
-    assert posts[2].timestamp is not None
-    assert posts[2].badge is None
+    assert posts[3].body == 'message abcd'
+    assert posts[3].timestamp is not None
+    assert posts[3].badge is None
 
     # Assert only three posts
     with pytest.raises(IndexError):
-        assert posts[3] is None
+        assert posts[4] is None
 
 
 def test_register(init):
