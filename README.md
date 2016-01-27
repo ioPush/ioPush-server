@@ -13,7 +13,7 @@ A test server is in place : [ioPush.net](https://iopush.net/app)
 
 ## Usage
 Messages can be posted with a POST request to `https://iopush.net/app/api/post` with the following JSON format.  
-Although, a custom header `authentication_token` must be added with the authentification token found on user's page.
+Although, a custom header `authentication_token` must be added with the authentication token found on user's page.
 
 ```json
 {
@@ -22,15 +22,15 @@ Although, a custom header `authentication_token` must be added with the authenti
    "push": "True"
 }
 ```
-Badge is optionnal and can be :
+Badge is optional and can be :
 * E : Error
 * S : Success/OK
 * I : Info
 * W : Warning  
-Push is optionnal, if set to `True` a push notification will be send to all user's devices.
+Push is optional, if set to `True` a push notification will be send to all user's devices.
 
 See [examples](#examples-to-send-data) for more help, a GET request also works.  
-Insecure `http://` connection is accepted only for `/app/api/post` endpoint, in order to allow devices that dont support SSL to post messages. If feasible, use `https://` secured connection.
+Insecure `http://` connection is accepted only for `/app/api/post` endpoint, in order to allow devices that don't support SSL to post messages. If feasible, use `https://` secured connection.
 
 
 ## Instructions to install
@@ -46,7 +46,7 @@ Insecure `http://` connection is accepted only for `/app/api/post` endpoint, in 
  * Login with user 123
  
 ## Why this software
-It is a part of my home automation system. I previoulsy used Twitter as a logbook of warning/errors but it lacks some functionnalities, and since few months notifications does not works well on my phone.
+It is a part of my home automation system. I previously used Twitter as a logbook of warning/errors but it lacks some functionalities, and since few months notifications does not works well on my phone.
 
 So the it should be able to:
  * Keep record of events - Done
@@ -55,7 +55,7 @@ So the it should be able to:
  * Send push notifications to Android, maybe other OS - Done, Android app to be published
  * Android application -> receive notifications - Tested in the [1st version](https://github.com/Oliv4945/ioPush)
  * Android application -> display user's record
- * Obvioulsy, have a nice design. But I am far away from being a good designer, so if some people want to help or submit pull request, your are welcome !
+ * Obviously, have a nice design. But I am far away from being a good designer, so if some people want to help or submit pull request, your are welcome !
 
 ## Examples to send data
 All examples are for POST request as issue a GET is most often simple. If you need some help just ask me or open an issue.
@@ -87,6 +87,6 @@ See [this code](https://gist.github.com/Oliv4945/90a24612998153e7ae0d)
 
 ### Sigfox - Arduino/Akeru
 Just configure the Sigfox callback like the following picture.  
-The "Custom payload config" is quite helpfull to format data.  
+The "Custom payload config" is quite helpful to format data.  
 ![alt-tag](https://iobook.net/jirafeau/f.php?h=1aN00QTO&p=1&k=e80f653d99)  
 This screenshot is without notifications, but you can add it easily : add a comma at the end of the `"body"` line, then write `"push": "True"`
