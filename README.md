@@ -68,7 +68,7 @@ All examples are for POST request as issue a GET is most often simple. If you ne
 Test it in a browser with the following URL.  
 When you implement a get request, be sure that the URL is percent encoded. The authentification token parameter must be `auth_token`
 ```
-https://iobook.net/api/post?auth_token=YourAuthToken&body=Message&badge=S
+https://iopush.net/api/post?auth_token=YourAuthToken&body=Message&badge=S
 ```
 ### Curl
 Just use the following:
@@ -84,7 +84,7 @@ curl -X POST -H 'authentication_token: YourAuthToken' -d '{"body": "Message send
    * Add a badge : set a `msg.badge` property
    * Notify by push message : set a `msg.push` property to `True`
 ```JSON
-[{"id":"adeebf25.52114","type":"subflow","name":"ioPush","in":[{"x":70,"y":70,"wires":[{"id":"43d1e4b1.bc2e1c"}]}],"out":[{"x":569,"y":108,"wires":[{"id":"a9684432.5697b8","port":0}]}]},{"id":"43d1e4b1.bc2e1c","type":"function","name":"Add notification data","func":"msg2 = {};\nmsg2.payload = {};\nmsg2.url = \"https://iobook.net/app/api/post\";\nmsg2.method = \"POST\";\nmsg2.headers = {\"authentication_token\": \"YourAuthToken\"};\nmsg2.payload.body = msg.payload;\nmsg2.payload.badge = msg.badge;\nmsg2.payload.push = msg.push;\nreturn msg2;","outputs":1,"noerr":0,"x":220,"y":70,"z":"adeebf25.52114","wires":[["31652b4f.ce9ad4"]]},{"id":"31652b4f.ce9ad4","type":"json","name":"","x":413,"y":71,"z":"adeebf25.52114","wires":[["a9684432.5697b8"]]},{"id":"a9684432.5697b8","type":"http request","name":"","method":"use","ret":"txt","url":"","x":447,"y":113,"z":"adeebf25.52114","wires":[[]]},{"id":"939cc31a.6c634","type":"subflow:adeebf25.52114","name":"","x":205,"y":356,"z":"3c426b18.c3bd94","wires":[["401e9113.bfe17"]]}]
+[{"id":"adeebf25.52114","type":"subflow","name":"ioPush","in":[{"x":70,"y":70,"wires":[{"id":"43d1e4b1.bc2e1c"}]}],"out":[{"x":569,"y":108,"wires":[{"id":"a9684432.5697b8","port":0}]}]},{"id":"43d1e4b1.bc2e1c","type":"function","name":"Add notification data","func":"msg2 = {};\nmsg2.payload = {};\nmsg2.url = \"https://iopush.net/app/api/post\";\nmsg2.method = \"POST\";\nmsg2.headers = {\"authentication_token\": \"YourAuthToken\"};\nmsg2.payload.body = msg.payload;\nmsg2.payload.badge = msg.badge;\nmsg2.payload.push = msg.push;\nreturn msg2;","outputs":1,"noerr":0,"x":220,"y":70,"z":"adeebf25.52114","wires":[["31652b4f.ce9ad4"]]},{"id":"31652b4f.ce9ad4","type":"json","name":"","x":413,"y":71,"z":"adeebf25.52114","wires":[["a9684432.5697b8"]]},{"id":"a9684432.5697b8","type":"http request","name":"","method":"use","ret":"txt","url":"","x":447,"y":113,"z":"adeebf25.52114","wires":[[]]},{"id":"939cc31a.6c634","type":"subflow:adeebf25.52114","name":"","x":205,"y":356,"z":"3c426b18.c3bd94","wires":[["401e9113.bfe17"]]}]
 ```
 
 ### Arduino
