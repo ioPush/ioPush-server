@@ -16,7 +16,7 @@ from .models import User, Post, Device
 
 
 
-
+@app.route('/api')
 @app.route('/')
 @app.route('/index')
 def index():
