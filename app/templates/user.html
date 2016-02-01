@@ -17,7 +17,9 @@
         <div class="container-fluid">
           <div class="col-xs-2">
             <script type="text/javascript">
-              document.write(moment("{{ post.timestamp.strftime("%Y-%m-%d %H:%M:%S") }}").fromNow());
+              var locale = window.navigator.userLanguage || window.navigator.language;
+              moment.locale(locale);
+              document.write(moment("{{ post.timestamp.strftime("%Y-%m-%d %H:%M:%S Z") }}").fromNow());
             </script>
           </div>
           <div class="col-xs-10">
