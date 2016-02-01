@@ -68,7 +68,7 @@ All examples are for POST request as issue a GET is most often simple. If you ne
 Test it in a browser with the following URL.  
 When you implement a get request, be sure that the URL is percent encoded. The authentification token parameter must be `auth_token`
 ```
-https://iopush.net/api/post?auth_token=YourAuthToken&body=Message&badge=S
+https://iopush.net/app/api/post?auth_token=YourAuthToken&body=Message&badge=S
 ```
 ### Curl
 Just use the following:
