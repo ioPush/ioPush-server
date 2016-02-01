@@ -9,6 +9,8 @@ Work in progress but basic service works :
  * User management
  * Device management
  * Push notifications to Android-GCM
+ * Email gateway to push messages
+
 A test server is in place : [ioPush.net](https://iopush.net/app)
 
 ## Usage
@@ -27,6 +29,7 @@ Badge is optional and can be :
 * S : Success/OK
 * I : Info
 * W : Warning  
+
 Push is optional, if set to `True` a push notification will be send to all user's devices.
 
 See [examples](#examples-to-send-data) for more help, a GET request also works.  
@@ -44,6 +47,8 @@ Insecure `http://` connection is accepted only for `/app/api/post` endpoint, in 
  * ./run.py
  * Go to http://localhost:5000/
  * Login with user 123
+ 
+Also, you can register misc/gateway-emails.py as a service to act as an email gateway.
  
 ## Why this software
 It is a part of my home automation system. I previously used Twitter as a logbook of warning/errors but it lacks some functionalities, and since few months notifications does not works well on my phone.
@@ -90,3 +95,6 @@ Just configure the Sigfox callback like the following picture.
 The "Custom payload config" is quite helpful to format data.  
 ![alt-tag](https://iobook.net/jirafeau/f.php?h=1aN00QTO&p=1&k=e80f653d99)  
 This screenshot is without notifications, but you can add it easily : add a comma at the end of the `"body"` line, then write `"push": "True"`
+
+### Emails
+Just send an email to YourAuthToken@post.iopush.net : the subject will be stored in your logbook and all your devices will be notified.
