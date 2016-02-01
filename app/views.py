@@ -108,6 +108,7 @@ def deleteUser(nickname):
 
         :return: Redirection to index page
     """
+    # TODO - Delete associated posts
     if nickname != current_user.nickname:
         flash('Wrong user')
         return redirect(url_for('index'))
@@ -155,6 +156,8 @@ def on_user_registerd(app, user, confirm_token):
     db.session.commit()
     # Store auth_token
     user.auth_token = user.get_auth_token()
+    while user.auth_token.find('@') != -1:  # Avoid '@' in auth_token for emails
+        user.auth_token = user.get_auth_token()
     db.session.commit()
     # Log new user
     app.logger.info('New user "%s" - Email : %s' % (user.nickname, user.email) )
@@ -167,6 +170,8 @@ def on_password_changed(app, user):
         parameters : Sent by flask-Security
     """
     user.auth_token = user.get_auth_token()
+    while user.auth_token.find('@') != -1:  # Avoid '@' in auth_token for emails
+        user.auth_token = user.get_auth_token()
     db.session.commit()
 
 def sendMessageGCM(message, user):
