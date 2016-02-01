@@ -8,4 +8,4 @@ db_repository/
 .DS_Store
 *.log
 config.py
-
+nohup.out
