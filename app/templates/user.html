@@ -14,20 +14,35 @@
   <ul class="list-group">
     {% for post in posts %}
       <li class="list-group-item">
-        <div class="container-fluid">
-          <div class="col-xs-2">
-            <script type="text/javascript">
-              var locale = window.navigator.userLanguage || window.navigator.language;
-              moment.locale(locale);
-              document.write(moment("{{ post.timestamp.strftime("%Y-%m-%d %H:%M:%S Z") }}").fromNow());
-            </script>
-          </div>
-          <div class="col-xs-10">
-            {{ post.body }}
-            {% if post.badge is equalto('W') %}<span class="pull-right label label-warning">Warning</span>{% endif %}
+        <div class="container-fluid" id="post-meta">
+            <div class="col-xs-4">
+              <script type="text/javascript">
+                var locale = window.navigator.userLanguage || window.navigator.language;
+                moment.locale(locale);
+                document.write(moment("{{ post.timestamp.strftime("%Y-%m-%d %H:%M:%S Z") }}").fromNow());
+              </script>
+            </div>
+            <div class="col-xs-4">
+              <script type="text/javascript">
+                var locale = window.navigator.userLanguage || window.navigator.language;
+                moment.locale(locale);
+                document.write(moment("{{ post.timestamp.strftime("%Y-%m-%d %H:%M:%S Z") }}").format('L - LT'));
+              </script>
+            </div>  
+            <div class="col-xs-4">
+              <a class="btn btn-default btn-xxs" role="button" href="{{ url_for('deletePost', postId=post.id) }}">Delete</a>
+            </div>
+        </div>
+        <div class="container-fluid" id="post">
+          <div class="col-xs-1">
+          {% if post.badge is equalto('W') %}<span class="pull-right label label-warning">Warning</span>{% endif %}
             {% if post.badge is equalto('E') %}<span class="pull-right label label-danger">Error</span>{% endif %}
             {% if post.badge is equalto('S') %}<span class="pull-right label label-success">OK</span>{% endif %}
             {% if post.badge is equalto('I') %}<span class="pull-right label label-info">Info</span>{% endif %}
+          </div>
+          <div class="col-xs-11">
+            {{ post.body }}
+            
           </div>
         </div>
       </li>

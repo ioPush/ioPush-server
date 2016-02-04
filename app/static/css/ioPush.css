@@ -1,0 +1,16 @@
+#post-meta {
+    color: #ffd1b3;
+    font-size: 85%;
+}
+
+#post {
+    margin-bottom: 20px;
+}
+
+.btn-xxs,
+.btn-group-xxs > .btn {
+  padding: 1px 5px;
+  font-size: 10px;
+  line-height: 1;
+  border-radius: 3px;
+}

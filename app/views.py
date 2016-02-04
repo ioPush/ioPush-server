@@ -8,7 +8,7 @@ from flask.ext.security import login_required, \
         current_user, auth_token_required
 from flask_security.signals import user_registered, \
         password_reset, password_changed
-from sqlalchemy import desc
+from sqlalchemy import desc, orm
 from app import app, db, gcm, security, user_datastore
 from .models import User, Post, Device
 
@@ -102,7 +102,7 @@ def user(nickname):
                            title='Profile')
 
 
-@app.route('/user/delete/<nickname>')
+@app.route('/delete/user/<nickname>')
 @login_required
 def deleteUser(nickname):
     """ Delete user account
@@ -117,6 +117,23 @@ def deleteUser(nickname):
     user_datastore.delete_user(user)
     user_datastore.commit()
     return redirect(url_for('index'))
+    
+@app.route('/delete/post/<int:postId>')
+@login_required
+def deletePost(postId):
+    """ Delete user account
+
+        :return: Redirection to index page
+    """
+    post = current_user.posts.filter_by(id=postId).first()
+    try:
+        db.session.delete(post)
+        db.session.commit()
+        flash('Post deleted')
+    except orm.exc.UnmappedInstanceError:
+        flash('Error deleting post')
+    finally:
+        return redirect(url_for('user', nickname=current_user.nickname))
 
 
 @security.login_context_processor
