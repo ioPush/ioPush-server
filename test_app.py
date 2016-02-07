@@ -544,3 +544,69 @@ def test_auth_token(init):
         data = r.get_data()
         assert r.status_code == 200
         assert data_previous == data
+
+def test_deletePost(init):
+    user = User.query.filter_by(nickname='utest').first()
+    # Uses same context to stay logged-in
+    with app.test_client() as c:
+        # Assert login
+        r = c.post(url_for('security.login'),
+                   data=dict(email='utest@test.com', password='pptest'),
+                   follow_redirects=True
+                   )
+        data = r.get_data()
+        assert r.status_code == 200
+ 
+        # Send posts
+        r = app.test_client().post(
+                    url_for('post'),
+                    data='{"body": "message 1", "badge": "W"}',
+                    headers={'authentication_token': user.get_auth_token()},
+                    follow_redirects=True)
+        data = r.get_data()
+        assert r.status_code == 200
+        r = app.test_client().post(
+                    url_for('post'),
+                    data='{"body": "message 2", "badge": "S"}',
+                    headers={'authentication_token': user.get_auth_token()},
+                    follow_redirects=True)
+        data = r.get_data()
+        assert r.status_code == 200
+        r = app.test_client().post(
+                    url_for('post'),
+                    data='{"body": "message 3", "badge": "I"}',
+                    headers={'authentication_token': user.get_auth_token()},
+                    follow_redirects=True)
+        data = r.get_data()
+        assert r.status_code == 200
+        
+        # Assert three posts
+        posts = user.posts.all()
+        assert len(posts) == 3
+        
+        # Delete second post
+        r = c.get(url_for('deletePost', postId=2),
+                   follow_redirects=True
+                   )
+        # Assert post deleted
+        data = r.get_data()
+        assert r.status_code == 200
+        assert b'message 1' in data
+        assert b'message 2' not in data
+        assert b'message 3' in data
+        assert b'Post deleted' in data
+        
+        # Assert error
+        r = c.get(url_for('deletePost', postId=2),
+                   follow_redirects=True
+                   )
+        data = r.get_data()
+        assert r.status_code == 200
+        assert b'message 1' in data
+        assert b'message 2' not in data
+        assert b'message 3' in data
+        assert b'Error deleting post' in data
+        
+        # TODO - Delete post of another user
+        
+        
