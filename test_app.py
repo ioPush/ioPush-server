@@ -469,10 +469,20 @@ def test_addDevice(init):
     assert r.status_code == 200
     assert data == b'No "regId" tag found'
 
-    # Assert added device
+    # Assert no name tag found
     r = app.test_client().post(
                 url_for('addDevice'),
                 data='{"service": "AndroidGCM", "regId": "fg79Ffg8iovwa"}',
+                headers={'authentication_token': user.get_auth_token()},
+                follow_redirects=True)
+    data = r.get_data()
+    assert r.status_code == 200
+    assert data == b'No "name" tag found'
+
+    # Assert added device
+    r = app.test_client().post(
+                url_for('addDevice'),
+                data='{"service": "AndroidGCM", "regId": "fg79Ffg8iovwa", "name": "FirstAndroidDevice"}',
                 headers={'authentication_token': user.get_auth_token()},
                 follow_redirects=True)
     data = r.get_data()
@@ -481,11 +491,12 @@ def test_addDevice(init):
     devices = user.devices.all()
     assert devices[0].service == 'AndroidGCM'
     assert devices[0].regId == 'fg79Ffg8iovwa'
+    assert devices[0].name == 'FirstAndroidDevice'
     
     # Assert unique regId
     r = app.test_client().post(
                 url_for('addDevice'),
-                data='{"service": "AndroidGCM", "regId": "fg79Ffg8iovwa"}',
+                data='{"service": "AndroidGCM", "regId": "fg79Ffg8iovwa", "name": "SecondAndroidDevice"}',
                 headers={'authentication_token': user.get_auth_token()},
                 follow_redirects=True)
     data = r.get_data()
@@ -494,6 +505,7 @@ def test_addDevice(init):
     devices = user.devices.all()
     assert devices[0].service == 'AndroidGCM'
     assert devices[0].regId == 'fg79Ffg8iovwa'
+    assert devices[0].name == 'FirstAndroidDevice'
     with pytest.raises(IndexError):
         assert devices[1] is None
 

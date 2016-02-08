@@ -52,6 +52,7 @@ class Device(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     service = db.Column(db.String(10))
     regId = db.Column(db.String(256))
+    name = db.Column(db.String(60))
     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     
     def __repr__(self):

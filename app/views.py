@@ -75,10 +75,13 @@ def addDevice():
     regId = data.get('regId', None)
     if regId is None:
         return 'No "regId" tag found'
+    name = data.get('name', None)
+    if name is None:
+        return 'No "name" tag found'
     device = Device.query.filter_by(regId=regId).first()
     if device is not None:
         return 'Device already registered'
-    device = Device(service=service, regId=regId, userId=current_user.id)
+    device = Device(service=service, regId=regId, name=name[:60], userId=current_user.id)
     db.session.add(device)
     db.session.commit()
     return 'ok'
