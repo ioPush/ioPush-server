@@ -8,6 +8,7 @@ from app.models import User, Post, Device
 import flask
 from flask import url_for
 from sqlalchemy import func
+import base64
 
 
 # Catch emails, in order to avoid sending them
@@ -32,7 +33,7 @@ def init():
                 password='pptest',
                 active=True,
                 confirmed_at=datetime.utcnow(),
-                auth_token='d')
+                auth_token='ddg56@dgfdG°dkjvk,')
     db.session.add(user)
     db.session.commit()
     # Context setup
@@ -607,7 +608,7 @@ def test_deletePost(init):
         assert b'message 2' not in data
         assert b'message 3' in data
         assert b'Post deleted' in data
-        
+
         # Assert error
         r = c.get(url_for('deletePost', postId=2),
                    follow_redirects=True
@@ -618,7 +619,34 @@ def test_deletePost(init):
         assert b'message 2' not in data
         assert b'message 3' in data
         assert b'Error deleting post' in data
-        
+
         # TODO - Delete post of another user
-        
-        
+
+
+def test_apiGetAuthToken(init):
+    user = User.query.filter_by(nickname='utest').first()
+    # Assert answer is auth token
+    r = app.test_client().get(url_for('apiGetAuthToken'),
+                   
+                   follow_redirects=True
+                   )
+    r = app.test_client().get(url_for('apiGetAuthToken'),
+                    headers={
+                    'Authorization': 'Basic %s' % base64.b64encode(b'utest@test.com:pptest').decode('utf-8')
+                   })
+    data = r.get_data()
+    assert r.status_code == 200
+    assert data == user.auth_token.encode('utf-8')
+    
+    # Assert not authentified
+    r = app.test_client().get(url_for('apiGetAuthToken'),
+                   
+                   follow_redirects=True
+                   )
+    r = app.test_client().get(url_for('apiGetAuthToken'),
+                    headers={
+                    'Authorization': 'Basic %s' % base64.b64encode(b'utest@test.com:ppteste').decode('utf-8')
+                   })
+    data = r.get_data()
+    assert r.status_code == 401
+    assert b'<h1>Unauthorized</h1>' in data

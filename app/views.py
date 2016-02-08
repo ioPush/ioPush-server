@@ -5,7 +5,7 @@ from os import urandom
 from flask import render_template, flash, redirect, session, \
         url_for, request, g
 from flask.ext.security import login_required, \
-        current_user, auth_token_required
+        current_user, auth_token_required, http_auth_required
 from flask_security.signals import user_registered, \
         password_reset, password_changed
 from sqlalchemy import desc, orm
@@ -85,6 +85,16 @@ def addDevice():
     db.session.add(device)
     db.session.commit()
     return 'ok'
+
+
+@app.route('/api/getAuthToken', methods=['GET'])
+@http_auth_required
+def apiGetAuthToken():
+    """ API end point to get auth token.
+
+        :return: authentication token
+    """
+    return current_user.auth_token
 
 
 @app.route('/user/<nickname>')
