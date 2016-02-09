@@ -630,7 +630,7 @@ def test_apiGetAuthToken(init):
                    
                    follow_redirects=True
                    )
-    r = app.test_client().get(url_for('apiGetAuthToken'),
+    r = app.test_client().post(url_for('apiGetAuthToken'),
                     headers={
                     'Authorization': 'Basic %s' % base64.b64encode(b'utest@test.com:pptest').decode('utf-8')
                    })
@@ -639,11 +639,11 @@ def test_apiGetAuthToken(init):
     assert data == user.auth_token.encode('utf-8')
     
     # Assert not authentified
-    r = app.test_client().get(url_for('apiGetAuthToken'),
+    r = app.test_client().post(url_for('apiGetAuthToken'),
                    
                    follow_redirects=True
                    )
-    r = app.test_client().get(url_for('apiGetAuthToken'),
+    r = app.test_client().post(url_for('apiGetAuthToken'),
                     headers={
                     'Authorization': 'Basic %s' % base64.b64encode(b'utest@test.com:ppteste').decode('utf-8')
                    })

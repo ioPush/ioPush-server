@@ -87,7 +87,7 @@ def addDevice():
     return 'ok'
 
 
-@app.route('/api/getAuthToken', methods=['GET'])
+@app.route('/api/getAuthToken', methods=['POST'])
 @http_auth_required
 def apiGetAuthToken():
     """ API end point to get auth token.
