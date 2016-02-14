@@ -237,7 +237,7 @@ def sendMessageGCM(message, user):
     if devices:
         data = {'text': message}
         regIds = [ device.regId for device in devices if device.service == "AndroidGCM" ]
-        response = gcm.json_request(registration_ids=regIds, data=data)
+        response = gcm.json_request(registration_ids=regIds, data=data, collapse_key='toto', delay_while_idle=True)
     
         # Errors, delete the device
         if response and 'errors' in response:
