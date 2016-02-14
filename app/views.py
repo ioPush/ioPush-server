@@ -8,7 +8,7 @@ from flask.ext.security import login_required, \
         current_user, auth_token_required, http_auth_required
 from flask_security.signals import user_registered, \
         password_reset, password_changed
-from sqlalchemy import desc, orm
+from sqlalchemy import asc, desc, orm
 from app import app, db, gcm, security, user_datastore
 from .models import User, Post, Device
 
@@ -109,13 +109,15 @@ def user(nickname):
         return redirect(url_for('index'))
     user = User.query.filter_by(nickname=nickname).first()
     posts = current_user.posts.order_by(desc(Post.timestamp)).all()
+    devices = current_user.devices.order_by(asc(Device.name)).all()
     return render_template('user.html',
                            user=user,
                            posts=posts,
+                           devices=devices,
                            title='Profile')
 
 
-@app.route('/delete/user/<nickname>')
+@app.route('/delete/user/<string:nickname>')
 @login_required
 def deleteUser(nickname):
     """ Delete user account
@@ -130,13 +132,14 @@ def deleteUser(nickname):
     user_datastore.delete_user(user)
     user_datastore.commit()
     return redirect(url_for('index'))
-    
+
+
 @app.route('/delete/post/<int:postId>')
 @login_required
 def deletePost(postId):
     """ Delete user account
 
-        :return: Redirection to index page
+        :return: Redirection to user page
     """
     post = current_user.posts.filter_by(id=postId).first()
     try:
@@ -145,6 +148,24 @@ def deletePost(postId):
         flash('Post deleted')
     except orm.exc.UnmappedInstanceError:
         flash('Error deleting post')
+    finally:
+        return redirect(url_for('user', nickname=current_user.nickname))
+
+
+@app.route('/delete/device/<int:deviceId>')
+@login_required
+def deleteDevice(deviceId):
+    """ Delete selected device
+
+        :return: Redirection to user page
+    """
+    device = current_user.devices.filter_by(id=deviceId).first()
+    try:
+        db.session.delete(device)
+        db.session.commit()
+        flash('Device deleted')
+    except orm.exc.UnmappedInstanceError:
+        flash('Error deleting device')
     finally:
         return redirect(url_for('user', nickname=current_user.nickname))
 

@@ -10,6 +10,14 @@
 .btn-xxs,
 .btn-group-xxs > .btn {
   padding: 1px 5px;
+  font-size: 12px;
+  line-height: 1;
+  border-radius: 3px;
+}
+
+.btn-xxxs,
+.btn-group-xxxs > .btn {
+  padding: 1px 5px;
   font-size: 10px;
   line-height: 1;
   border-radius: 3px;

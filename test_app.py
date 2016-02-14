@@ -622,6 +622,70 @@ def test_deletePost(init):
 
         # TODO - Delete post of another user
 
+def test_deleteDevice(init):
+    user = User.query.filter_by(nickname='utest').first()
+    # Uses same context to stay logged-in
+    with app.test_client() as c:
+        # Assert login
+        r = c.post(url_for('security.login'),
+                   data=dict(email='utest@test.com', password='pptest'),
+                   follow_redirects=True
+                   )
+        data = r.get_data()
+        assert r.status_code == 200
+ 
+        # Add devices
+        r = app.test_client().post(
+                url_for('addDevice'),
+                data='{"service": "AndroidGCM", "regId": "fg79Ffg8iovwa", "name": "FirstAndroidDevice"}',
+                headers={'authentication_token': user.get_auth_token()},
+                follow_redirects=True)
+        data = r.get_data()
+        assert r.status_code == 200
+        r = app.test_client().post(
+                url_for('addDevice'),
+                data='{"service": "AndroidGCM", "regId": "moir45vcklg", "name": "SecondAndroidDevice"}',
+                headers={'authentication_token': user.get_auth_token()},
+                follow_redirects=True)
+        data = r.get_data()
+        assert r.status_code == 200
+        r = app.test_client().post(
+                url_for('addDevice'),
+                data='{"service": "AndroidGCM", "regId": "4vbvpoio408x5", "name": "ThirdAndroidDevice"}',
+                headers={'authentication_token': user.get_auth_token()},
+                follow_redirects=True)
+        data = r.get_data()
+        assert r.status_code == 200
+        
+        # Assert three posts
+        devices = user.devices.all()
+        assert len(devices) == 3
+        
+        # Delete second device
+        r = c.get(url_for('deleteDevice', deviceId=2),
+                   follow_redirects=True
+                   )
+        # Assert device deleted
+        data = r.get_data()
+        assert r.status_code == 200
+        assert b'FirstAndroidDevice' in data
+        assert b'SecondAndroidDevice' not in data
+        assert b'ThirdAndroidDevice' in data
+        assert b'Device deleted' in data
+
+        # Assert error
+        r = c.get(url_for('deleteDevice', deviceId=2),
+                   follow_redirects=True
+                   )
+        data = r.get_data()
+        assert r.status_code == 200
+        assert b'FirstAndroidDevice' in data
+        assert b'SecondAndroidDevice' not in data
+        assert b'ThirdAndroidDevice' in data
+        assert b'Error deleting device' in data
+
+        # TODO - Delete post of another user
+
 
 def test_apiGetAuthToken(init):
     user = User.query.filter_by(nickname='utest').first()

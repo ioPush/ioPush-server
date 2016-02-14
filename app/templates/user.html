@@ -8,8 +8,17 @@
   <dl class="dl-horizontal">
     <dt>Email</dt><dd>{{ user.email }}</dd>
     <dt>Auth token</dt><dd>{{ user.auth_token }}</dd>
-    <dt>Password</dt><dd><a class="btn btn-default btn-xs" href="{{ url_for('security.change_password') }}" role="button">Change</a></dd>
-    <dt>Account</dt><dd><a class="btn btn-default btn-xs" href="{{ url_for('deleteUser', nickname=current_user.nickname) }}" role="button">Delete</a></dd>
+    <dt>Password</dt><dd><a class="btn btn-default btn-xxs" href="{{ url_for('security.change_password') }}" role="button">Change</a></dd>
+    <dt>Account</dt><dd><a class="btn btn-default btn-xxs" href="{{ url_for('deleteUser', nickname=current_user.nickname) }}" role="button">Delete</a></dd>
+    <dt>Devices</dt>
+      <dd><table>
+        {% for device in devices %}
+          <tr>
+            <td>{{ device.name }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td><a class="btn btn-default btn-xxs" href="{{ url_for('deleteDevice', deviceId=device.id) }}" role="button">Delete</a></td>
+          </tr>
+        {% endfor %}
+      </table></dd>
   </dl>
   <ul class="list-group">
     {% for post in posts %}
@@ -30,7 +39,7 @@
               </script>
             </div>  
             <div class="col-xs-4">
-              <a class="btn btn-default btn-xxs" role="button" href="{{ url_for('deletePost', postId=post.id) }}">Delete</a>
+              <a class="btn btn-default btn-xxxs" role="button" href="{{ url_for('deletePost', postId=post.id) }}">Delete</a>
             </div>
         </div>
         <div class="container-fluid" id="post">
