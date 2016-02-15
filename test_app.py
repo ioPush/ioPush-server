@@ -622,8 +622,7 @@ def test_deletePost(init):
 
         # TODO - Delete post of another user
 
-"""
-# TODO - To be completed
+
 def test_renameDevice(init):
     user = User.query.filter_by(nickname='utest').first()
     # Uses same context to stay logged-in
@@ -663,19 +662,47 @@ def test_renameDevice(init):
         devices = user.devices.all()
         assert len(devices) == 3
         
+        # Assert no new name
+        r = c.post(
+              url_for('renameDevice'),
+              headers={'Content-Type': 'application/x-www-form-urlencoded'},
+              data='deviceId=2',
+              follow_redirects=True)
+        data = r.get_data()
+        assert r.status_code == 200
+        assert b'FirstAndroidDevice' in data
+        assert b'SecondAndroidDevice' in data
+        assert b'ThirdAndroidDevice' in data
+        assert b'No new name provided' in data
+        
+        # Assert error
+        r = c.post(
+              url_for('renameDevice'),
+              headers={'Content-Type': 'application/x-www-form-urlencoded'},
+              data='newName=RenamedDevice',
+              follow_redirects=True)
+        data = r.get_data()
+        assert r.status_code == 200
+        assert b'FirstAndroidDevice' in data
+        assert b'SecondAndroidDevice' in data
+        assert b'RenamedDevice' not in data
+        assert b'ThirdAndroidDevice' in data
+        assert b'Error renaming device' in data
+        
         # Assert change name
         r = c.post(
               url_for('renameDevice'),
+              headers={'Content-Type': 'application/x-www-form-urlencoded'},
               data='deviceId=2&newName=RenamedDevice',
               follow_redirects=True)
-        data = r.get_data()
+        data = r.get_data()        
         assert r.status_code == 200
         assert b'FirstAndroidDevice' in data
         assert b'SecondAndroidDevice' not in data
         assert b'RenamedDevice' in data
         assert b'ThirdAndroidDevice' in data
-        assert b'Device "RenamedDevice" renamed' in data
-"""
+        assert b'Device &#34;RenamedDevice&#34; renamed' in data
+
 
 def test_deleteDevice(init):
     user = User.query.filter_by(nickname='utest').first()

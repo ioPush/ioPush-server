@@ -190,7 +190,7 @@ def renameDevice():
     if device is None:
         flash('Error renaming device')
     else:
-        device.name = newName
+        device.name = newName[:60]
         db.session.commit()
         flash('Device "' + device.name + '" renamed')
     return redirect(url_for('user', nickname=current_user.nickname))

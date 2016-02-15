@@ -17,9 +17,11 @@
             <td>{{ device.name }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td>
               <button class="btn btn-default btn-xxs" data-toggle="modal" data-target="#editDevice"
-                data-device-id="{{ device.id }}"
-                data-device-name="{{ device.name }}"
-                data-delete-device-url="{{ url_for('deleteDevice', deviceId=device.id) }}">
+                  data-device-id="{{ device.id }}"
+                  data-device-name="{{ device.name }}"
+                  data-delete-device-url="{{ url_for('deleteDevice', deviceId=device.id) }}"
+                  data-rename-device-url="{{ url_for('renameDevice') }}"
+                >
                 Edit
               </button>
             </td>
@@ -79,7 +81,7 @@
           </h4>
         </div>
         <div class="modal-body">
-          <form role="form" method="POST" action="/rename/device">
+          <form id="renameDevice" role="form" method="POST" action="">
             <div class="form-group">
               <label for="newName">New name</label>
               <input type="text" class="form-control" name="newName" placeholder="Enter new name"/>
