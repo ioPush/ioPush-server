@@ -110,10 +110,14 @@ def user(nickname):
     user = User.query.filter_by(nickname=nickname).first()
     posts = current_user.posts.order_by(desc(Post.timestamp)).all()
     devices = current_user.devices.order_by(asc(Device.name)).all()
+    authToken = current_user.auth_token
+    # Split authToken in order to allow mobile device word wrapping thanks to '<wbr>'
+    authTokenSplit = [authToken[i:i+1] for i in range(0, len(authToken), 1)]
     return render_template('user.html',
                            user=user,
                            posts=posts,
                            devices=devices,
+                           authTokenSplit = authTokenSplit,
                            title='Profile')
 
 
@@ -169,6 +173,27 @@ def deleteDevice(deviceId):
     finally:
         return redirect(url_for('user', nickname=current_user.nickname))
 
+
+@app.route('/rename/device', methods=['POST'])
+@login_required
+def renameDevice():
+    """ Rename selected device)
+    
+        :return: Redirection to user page
+    """
+    newName = request.form.get('newName', None)
+    deviceId = request.form.get('deviceId', None)
+    if newName is None:
+        flash('No new name provided')
+        return redirect(url_for('user', nickname=current_user.nickname))
+    device = current_user.devices.filter_by(id=deviceId).first()
+    if device is None:
+        flash('Error renaming device')
+    else:
+        device.name = newName
+        db.session.commit()
+        flash('Device "' + device.name + '" renamed')
+    return redirect(url_for('user', nickname=current_user.nickname))
 
 @security.login_context_processor
 def login_register_processor():
