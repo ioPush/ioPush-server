@@ -30,7 +30,9 @@ Badge is optional and can be :
 * I : Info
 * W : Warning  
 
-Push is optional, if set to `True` a push notification will be send to all user's devices.
+Push is optional:
+* if set to `All`, a push notification will be send to all user's devices.
+* if set to `deviceName`, the push notification will only be delivered to this device.
 
 See [examples](#examples-to-send-data) for more help, a GET request also works.  
 Insecure `http://` connection is accepted only for `/app/api/post` endpoint, in order to allow devices that don't support SSL to post messages. If feasible, use `https://` secured connection.
