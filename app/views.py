@@ -3,7 +3,7 @@
 from datetime import datetime
 from os import urandom
 from flask import render_template, flash, redirect, session, \
-        url_for, request, g
+        url_for, request, g, jsonify
 from flask.ext.security import login_required, \
         current_user, auth_token_required, http_auth_required
 from flask_security.signals import user_registered, \
@@ -94,7 +94,8 @@ def apiGetAuthToken():
 
         :return: authentication token
     """
-    return current_user.auth_token
+    data = { "nickname": current_user.nickname, "authToken": current_user.auth_token }
+    return jsonify(**data)
 
 
 @app.route('/user/<nickname>')
