@@ -11,23 +11,32 @@
     <dt>Password</dt><dd><a class="btn btn-default btn-xxs" href="{{ url_for('security.change_password') }}" role="button">Change</a></dd>
     <dt>Account</dt><dd><a class="btn btn-default btn-xxs" href="{{ url_for('deleteUser', nickname=current_user.nickname) }}" role="button">Delete</a></dd>
     <dt>Devices</dt>
-      <dd><table>
-        {% for device in devices %}
-          <tr>
-            <td>{{ device.name }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-            <td>
-              <button class="btn btn-default btn-xxs" data-toggle="modal" data-target="#editDevice"
-                  data-device-id="{{ device.id }}"
-                  data-device-name="{{ device.name }}"
-                  data-delete-device-url="{{ url_for('deleteDevice', deviceId=device.id) }}"
-                  data-rename-device-url="{{ url_for('renameDevice') }}"
-                >
-                Edit
-              </button>
-            </td>
-          </tr>
-        {% endfor %}
-      </table></dd>
+    <dd><table>
+      {% for device in devices %}
+        <tr>
+          <td>{{ device.name }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td>
+            <button class="btn btn-default btn-xxs" data-toggle="modal" data-target="#editDevice"
+                data-device-id="{{ device.id }}"
+                data-device-name="{{ device.name }}"
+                data-delete-device-url="{{ url_for('deleteDevice', deviceId=device.id) }}"
+                data-rename-device-url="{{ url_for('renameDevice') }}"
+              >
+              Edit
+            </button>
+          </td>
+        </tr>
+      {% endfor %}
+    </table></dd>
+    <dt>Push notifications</dt>
+    <dd>
+      <button class="btn btn-default btn-xxs"
+        id="pushTestAllDevices"
+        onclick="pushTestAllDevices('{{ url_for('post') }}', '{{ user.auth_token }}')"
+        >
+        Test all devices
+      </button>
+    </dd> 
   </dl>
   <ul class="list-group">
     {% for post in posts %}
