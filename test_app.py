@@ -9,6 +9,7 @@ import flask
 from flask import url_for
 from sqlalchemy import func
 import base64
+import json
 
 
 # Catch emails, in order to avoid sending them
@@ -782,7 +783,9 @@ def test_apiGetAuthToken(init):
                    })
     data = r.get_data()
     assert r.status_code == 200
-    assert data == user.auth_token.encode('utf-8')
+    result = json.loads(data.decode('utf-8'))
+    assert result['authToken'] == 'ddg56@dgfdG°dkjvk,'
+    assert result['nickname'] == 'utest'
     
     # Assert not authentified
     r = app.test_client().post(url_for('apiGetAuthToken'),
