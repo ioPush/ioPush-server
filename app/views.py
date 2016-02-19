@@ -53,8 +53,8 @@ def post():
                 userId=current_user.id, badge=badge)
     db.session.add(post)
     db.session.commit()
-    if push == 'True':
-        sendMessageGCM(body, current_user)
+    if push is not None:
+        sendMessageGCM(body, current_user, push)
     return 'ok'
 
 
@@ -251,14 +251,17 @@ def on_password_changed(app, user):
         user.auth_token = user.get_auth_token()
     db.session.commit()
 
-def sendMessageGCM(message, user):
+def sendMessageGCM(message, user, deviceName):
     """Send the push message to a user or all users if 'user' is not passed
     
     :param message: Message to send
     :param user: User to send, None if the message is for all
     """
+    if ((deviceName.lower() == 'true') or (deviceName.lower() =='all')):
+        devices = user.devices.all()
+    else:
+        devices = user.devices.filter_by(name=deviceName)
 
-    devices = user.devices.all()
     if devices:
         data = {'text': message}
         regIds = [ device.regId for device in devices if device.service == "AndroidGCM" ]

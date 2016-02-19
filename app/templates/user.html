@@ -25,16 +25,24 @@
               Edit
             </button>
           </td>
+          <td>
+            <button class="btn btn-default btn-xxs"
+                id="pushTestAllDevices-{{ device.name }}"
+                onclick="pushTestAllDevices('{{ url_for('post') }}', '{{ user.auth_token }}', '{{ device.name }}')"
+            >
+              Test push
+            </button>
+          </td>
         </tr>
       {% endfor %}
     </table></dd>
     <dt>Push notifications</dt>
     <dd>
       <button class="btn btn-default btn-xxs"
-        id="pushTestAllDevices"
-        onclick="pushTestAllDevices('{{ url_for('post') }}', '{{ user.auth_token }}')"
+        id="pushTestAllDevices-All"
+        onclick="pushTestAllDevices('{{ url_for('post') }}', '{{ user.auth_token }}', 'All')"
         >
-        Test all devices
+          Test all devices
       </button>
     </dd> 
   </dl>

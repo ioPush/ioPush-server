@@ -10,32 +10,32 @@ $(document).ready(function() {
 
 
 // Send a push notification to all user's devices
-function pushTestAllDevices(url, authToken) {
-  document.getElementById("pushTestAllDevices").innerHTML = "Sending...";
+function pushTestAllDevices(url, authToken, deviceName) {
+  document.getElementById("pushTestAllDevices-" + deviceName).innerHTML = "Sending...";
   
   $.ajax({
     type: "POST",
     url: url,
-    data: JSON.stringify({ "body": "Test message", "push" : "True", "badge": "I" }),
+    data: JSON.stringify({ "body": "Test message", "push" : deviceName, "badge": "I" }),
     contentType: "application/json; charset=utf-8",
     headers: { 'authentication_token' : authToken },
     /*
     success: function(data){
-      document.getElementById("pushTestAllDevices").innerHTML = "Send";
+      document.getElementById("pushTestAllDevices-" + deviceName).innerHTML = "Send";
     },
     failure: function(errMsg) {
-      document.getElementById("pushTestAllDevices").innerHTML = "Fail to reach server";
+      document.getElementById("pushTestAllDevices-" + deviceName).innerHTML = "Fail to reach server";
     },
     statusCode: {
       200: function(data) {
         if (data == 'ok') {
-          document.getElementById("pushTestAllDevices").innerHTML = "Send !";
+          document.getElementById("pushTestAllDevices-" + deviceName).innerHTML = "Send !";
         } else {
-          document.getElementById("pushTestAllDevices").innerHTML = "Fail";
+          document.getElementById("pushTestAllDevices-" + deviceName).innerHTML = "Fail";
         }
       },
       404: function() {
-        document.getElementById("pushTestAllDevices").innerHTML = "Fail to reach the server";
+        document.getElementById("pushTestAllDevices-" + deviceName).innerHTML = "Fail to reach the server";
       }
     }
     */
@@ -43,11 +43,16 @@ function pushTestAllDevices(url, authToken) {
       switch (jqXHR.status) {
         case 200:
           if (jqXHR.responseText  == 'ok') {
-            document.getElementById("pushTestAllDevices").innerHTML = "Send !";
+            document.getElementById("pushTestAllDevices-" + deviceName).innerHTML = "Send !";
             break;
           }
         default:
-          document.getElementById("pushTestAllDevices").innerHTML = "Failed";
+          document.getElementById("pushTestAllDevices-" + deviceName).innerHTML = "Failed";
+      }
+      if (deviceName == 'All') {
+        setTimeout(function(){document.getElementById("pushTestAllDevices-All").innerHTML = "Test all devices" }, 4000);
+      } else {
+        setTimeout(function(){document.getElementById("pushTestAllDevices-" + deviceName).innerHTML = "Test push" }, 4000);
       }
     }
   });  
