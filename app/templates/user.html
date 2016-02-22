@@ -65,7 +65,6 @@
               </script>
             </div>  
             <div class="col-xs-4">
-              <a class="btn btn-default btn-xxxs" role="button" href="{{ url_for('deletePost', postId=post.id) }}">Delete</a>
               <button class="btn btn-default btn-xxxs"
                 id="post-delete-{{ post.id }}"
                 onclick="deletePost('{{ url_for('deletePost', postId=post.id) }}', '{{ user.auth_token }}','{{ post.id }}')"
