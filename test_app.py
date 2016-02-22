@@ -599,28 +599,28 @@ def test_deletePost(init):
         assert len(posts) == 3
         
         # Delete second post
-        r = c.get(url_for('deletePost', postId=2),
-                   follow_redirects=True
+        r = c.post(url_for('deletePost', postId=2),
                    )
         # Assert post deleted
         data = r.get_data()
         assert r.status_code == 200
-        assert b'message 1' in data
-        assert b'message 2' not in data
-        assert b'message 3' in data
-        assert b'Post deleted' in data
+        assert data == b'ok'
+        posts = user.posts.all()
+        assert len(posts) == 2
+        assert posts[0].body == 'message 1'
+        assert posts[1].body == 'message 3'
 
         # Assert error
-        r = c.get(url_for('deletePost', postId=2),
-                   follow_redirects=True
+        r = c.post(url_for('deletePost', postId=2),
                    )
         data = r.get_data()
         assert r.status_code == 200
-        assert b'message 1' in data
-        assert b'message 2' not in data
-        assert b'message 3' in data
-        assert b'Error deleting post' in data
-
+        assert data == b'nok'
+        posts = user.posts.all()
+        assert len(posts) == 2
+        assert posts[0].body == 'message 1'
+        assert posts[1].body == 'message 3'
+        
         # TODO - Delete post of another user
 
 

@@ -50,10 +50,33 @@ function pushTestAllDevices(url, authToken, deviceName) {
           document.getElementById("pushTestAllDevices-" + deviceName).innerHTML = "Failed";
       }
       if (deviceName == 'All') {
-        setTimeout(function(){document.getElementById("pushTestAllDevices-All").innerHTML = "Test all devices" }, 4000);
+        setTimeout(function(){ document.getElementById("pushTestAllDevices-All").innerHTML = "Test all devices" }, 4000);
       } else {
-        setTimeout(function(){document.getElementById("pushTestAllDevices-" + deviceName).innerHTML = "Test push" }, 4000);
+        setTimeout(function(){ document.getElementById("pushTestAllDevices-" + deviceName).innerHTML = "Test push" }, 4000);
       }
     }
   });  
+}
+
+// Delete posts
+function deletePost(url, authToken, postId) {
+  $.ajax({
+    type: "POST",
+    url: url,
+    headers: { 'authentication_token' : authToken },
+    complete: function(jqXHR, textStatus) {
+      switch (jqXHR.status) {
+        case 200:
+          if (jqXHR.responseText  == 'ok') {
+            $("#post-" + postId).hide( 400, function() {
+              $(this).remove();
+            });
+            break;
+          }
+        default:
+          document.getElementById("post-delete-" + postId).innerHTML = "Failed";
+          setTimeout(function(){ document.getElementById("post-delete-" + postId).innerHTML = "Test all devices" }, 4000);
+      }
+    }
+  });
 }
