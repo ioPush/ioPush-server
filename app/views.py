@@ -11,7 +11,7 @@ from flask_security.signals import user_registered, \
 from sqlalchemy import asc, desc, orm
 from app import app, db, gcm, security, user_datastore
 from .models import User, Post, Device
-
+import requests
 
 
 
@@ -37,6 +37,8 @@ def post():
 
         body : Text to be stored/push
         badge : Badge to display (OK : S - Info : I - Warning : W - Error : E)
+        httpcallback : Send a get request to the http url defined in preferences
+        push : Name of the device to push a message. 'all' or 'true' for all user's devices
 
         :return: 'ok' if success, an error otherwise
     """
@@ -49,12 +51,17 @@ def post():
         return 'No "body" tag found'
     badge = data.get('badge', None)
     push = data.get('push', None)
+    httpCallback = data.get('httpcallback')
     post = Post(body=body, timestamp=datetime.utcnow(),
                 userId=current_user.id, badge=badge)
     db.session.add(post)
     db.session.commit()
     if push is not None:
         sendMessageGCM(body, current_user, push)
+    if httpCallback is not None:
+        callbackUrl = app.config['callbackURL']
+        if callbackUrl is not None:
+        	requests.get(callbakcUrl, {'nickname': current_user.nickname, 'body': body} )
     return 'ok'
 
 
