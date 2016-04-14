@@ -51,7 +51,7 @@ def post():
         return 'No "body" tag found'
     badge = data.get('badge', None)
     push = data.get('push', None)
-    httpCallback = data.get('httpcallback')
+    httpCallback = data.get('httpcallback', None)
     post = Post(body=body, timestamp=datetime.utcnow(),
                 userId=current_user.id, badge=badge)
     db.session.add(post)
@@ -59,9 +59,9 @@ def post():
     if push is not None:
         sendMessageGCM(body, current_user, push)
     if httpCallback is not None:
-        callbackUrl = app.config['callbackURL']
+        callbackUrl = app.config['CALLBACK_URL']
         if callbackUrl is not None:
-        	requests.get(callbakcUrl, {'nickname': current_user.nickname, 'body': body} )
+            requests.get(callbackUrl, {'nickname': current_user.nickname, 'body': body} )
     return 'ok'
 
 
