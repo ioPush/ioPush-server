@@ -61,7 +61,10 @@ def post():
     if httpCallback is not None:
         callbackUrl = app.config['CALLBACK_URL']
         if callbackUrl is not None:
-            requests.get(callbackUrl, {'nickname': current_user.nickname, 'body': body} )
+            try:
+                requests.get(callbackUrl, {'nickname': current_user.nickname, 'body': body} )
+            except requests.exceptions.ConnectionError:
+                pass #TODO - Change return code or value
     return 'ok'
 
 
