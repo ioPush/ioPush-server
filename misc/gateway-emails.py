@@ -18,7 +18,10 @@ class FakeSMTPServer(smtpd.SMTPServer):
         print('rcpttos :',rcpttos[0])
         key = rcpttos[0].rsplit('@', 1)[0]
         print('key :', key)
-        payload = {'body': email.header.decode_header(email.message_from_string(data).get('subject', None))[0][0].decode("utf-8"), 'push': 'True', 'httpcallback': 'True', 'httpcallback': 'True'}
+        body = email.header.decode_header(email.message_from_string(data).get('subject', None))[0][0]
+        if isinstance(body, str) == False:
+            body = body.decode('utf-8')
+        payload = {'body': body, 'push': 'True', 'httpcallback': 'True', 'httpcallback': 'True'}
         print('payload :', payload)
         header = {'authentication_token': key}
         r = requests.post('http://localhost/app/api/post', data=json.dumps(payload), headers=header)
