@@ -247,7 +247,7 @@ def on_user_registerd(app, user, confirm_token):
     # Log new user
     app.logger.info('New user "%s" - Email : %s' % (user.nickname, user.email) )
 
-#@password_reset.connect_via(app)
+@password_reset.connect_via(app)
 @password_changed.connect_via(app)
 def on_password_changed(app, user):
     """ Catches password changes, update user's auth_token
