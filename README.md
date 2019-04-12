@@ -4,6 +4,9 @@ It can be considered like Twitter but for the big word (world ;-) of Internet of
 
 To be used with a soon to arrive Android push application
 
+## Must read
+12th of April 2019: hile this project works, I used it without issues for more than 3 years, Google is moving from Google Cloud Messaging system to Firebase. The API is similar but to some work has to be done so I archive the project for now.
+
 ## Description
 Work in progress but basic service works :
  * User management
